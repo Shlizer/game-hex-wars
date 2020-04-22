@@ -1,10 +1,17 @@
 {
   "name": "hex-wars",
+  "author": "Krzysiek 'Shlizer' Hinc",
+  "repository": "https://github.com/Shlizer/hex-wars",
   "version": "0.1.0",
+  "main": "srv/index.js",
   "private": true,
   "dependencies": {},
-  "scripts": {},
+  "scripts": {
+    "start": "electron ."
+  },
   "devDependencies": {
+    "electron": "8.2.3",
+    "electron-reload": "^1.5.0",
     "eslint": "^6.8.0"
   }
 }
