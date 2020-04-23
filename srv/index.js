@@ -10,17 +10,29 @@ require('electron-reload')(path.join(__dirname, '../src'));
 // });
 
 function createWindow() {
-    // Create the browser window.
     const mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600
+        title: 'Hex Wars',
+        transparent: true,
+        width: 1200,
+        height: 700,
+        alwaysOnTop: true,
+        frame: false,
+        show: false,
+        resizable: false,
+        fullscreenable: false,
+        webPreferences: {
+            nodeIntegration: true
+        }
     })
 
-    // and load the index.html of the app.
     mainWindow.loadFile(path.join(__dirname, '../src/index.html'))
 
     // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
+
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show()
+    });
 }
 
 // This method will be called when Electron has finished

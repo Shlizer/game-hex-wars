@@ -1,1 +1,2 @@
-alert('js loaded')
+import { start } from './Game/index.js'
+start()

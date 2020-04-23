@@ -1,0 +1,82 @@
+@import url('../assets/fonts/Lato/LatoLatin/latolatinfonts.css');
+
+body {
+    position: fixed;
+    top: var(--header-size);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 15px;
+    font-family: var(--font-name);
+    background-color: var(--app-bg);
+    color: var(--app-text);
+    box-sizing: border-box;
+    -webkit-app-region: no-drag;
+}
+
+#topPanel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-size);
+    line-height: var(--header-size);
+    display: flex;
+    flex-direction: row;
+    color: var(--header-color);
+    background: var(--header-background);
+    -webkit-app-region: drag;
+}
+
+#topPanel .title {
+    flex-grow: 1;
+    padding: 0 2em;
+}
+
+#topPanel .buttons i {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    opacity: 0.3;
+}
+
+#topPanel .buttons i.close {
+    position: relative;
+}
+
+#topPanel .buttons i.close:hover {
+    opacity: 1;
+}
+
+#topPanel .buttons i.close:before,
+#topPanel .buttons i.close:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: ' ';
+    height: 1em;
+    width: 2px;
+    background-color: #fff;
+}
+
+#topPanel .buttons i.close:before {
+    transform: rotate(45deg);
+}
+
+#topPanel .buttons i.close:after {
+    transform: rotate(-45deg);
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+* {
+    user-select: none;
+}
