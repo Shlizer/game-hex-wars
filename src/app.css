@@ -14,6 +14,15 @@ body {
     -webkit-app-region: no-drag;
 }
 
+#debug {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.4);
+    top: var(--header-size);
+    left: 0;
+    margin: 2em;
+    padding: 1em;
+}
+
 #topPanel {
     position: fixed;
     top: 0;

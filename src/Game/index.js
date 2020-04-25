@@ -1,12 +1,9 @@
 import { Engine } from './engine.js'
 
-export function start() {
-    const config = {
-        showDebug: true,
-        canvas: document.getElementById('mapCanvas'),
-        container: document.getElementById('map')
-    }
+export function initialize(config) {
+    Engine.initialize(config)
+}
 
-    const game = new Engine(config)
-    game.run()
+export function run() {
+    window.requestAnimationFrame(Engine.run)
 }

@@ -1,31 +1,43 @@
-import { CanvasManager } from './canvas.js'
-import { Debugger } from './debugger.js'
+import { Debugger } from './Debug/index.js'
+import { Input } from './Input/index.js'
+import { Canvas } from './Canvas/index.js'
 
 export class Engine {
-    showDebug
-    canvas
-    context
-    container
+    static initialize(config) {
+        Engine.time = {
+            start: performance.now(),
+            now: performance.now(),
+            stamps: [],
+            fps: 0
+        }
 
-    constructor(config) {
         const { showDebug, canvas, container } = config
-        this.showDebug = showDebug
-        this.canvas = canvas
-        this.context = canvas.getContext('2d')
-        this.container = container
-        this.debugger = new Debugger(this)
-        this.canvasManager = new CanvasManager(this)
+        Engine.debug = new Debugger(showDebug)
+        Engine.input = new Input()
+        Engine.canvas = new Canvas(canvas, container)
     }
 
-    run() {
-        requestAnimationFrame(this.loop)
+    static update(time) {
+        Engine.debug.update(time)
+        Engine.input.update(time)
+        Engine.canvas.update(time)
     }
 
-    loop = (time) => {
-        this.canvasManager.render(time)
+    static render(time) {
+        Engine.debug.render(time)
+        Engine.input.render(time)
+        Engine.canvas.render(time)
+    }
 
-        if (this.showDebug) this.debugger.render(time)
-        //if (game_running) 
-        requestAnimationFrame(this.loop)
+    static run(time) {
+        Engine.time.now = time
+        while (Engine.time.stamps.length > 0 && Engine.time.stamps[0] <= Engine.time.now - 1000) {
+            Engine.time.stamps.shift();
+        }
+        Engine.time.stamps.push(Engine.time.now)
+        Engine.time.fps = Engine.time.stamps.length
+        Engine.update(time)
+        Engine.render(time)
+        window.requestAnimationFrame(Engine.run)
     }
 }
