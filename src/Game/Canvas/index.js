@@ -5,11 +5,12 @@ export class Canvas {
         this.canvas = canvas
         this.context = canvas.getContext('2d')
         this.container = container
+        this.drawable = []
     }
 
-    update(time, paused) { }
+    update(time) { }
 
-    render(time, paused) {
+    render(time) {
         this.checkSize()
         this.clear(time)
     }
@@ -31,8 +32,17 @@ export class Canvas {
         return false
     }
 
-    clear(time) {
+    clear() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+        this.drawable.forEach(obj => obj.render(this.context))
+    }
+
+    addForRender(renderable) {
+        this.drawable.push(renderable)
+    }
+
+    // @todo: for performance check
+    squares(time) {
         time *= 0.001
         this.context.fillStyle = "#DDE"
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
@@ -54,7 +64,6 @@ export class Canvas {
                 }
             }
         }
-        drawIt()
         // performance test
         for (let i = 0; i < 50; ++i) {
             drawIt()

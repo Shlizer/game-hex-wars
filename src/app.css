@@ -18,7 +18,7 @@ body {
     position: fixed;
     background-color: rgba(0, 0, 0, 0.4);
     top: var(--header-size);
-    left: 0;
+    right: 0;
     margin: 2em;
     padding: 1em;
 }
@@ -80,10 +80,32 @@ body {
 
 #map {
     position: absolute;
-    top: 0;
+    background: rgba(0, 0, 0, 0.2);
+    top: 30px;
+    left: 30px;
+    right: 30px;
+    bottom: 30px;
+}
+
+#loading {
+    position: fixed;
+    display: flex;
+    flex-grow: 1;
+    top: var(--header-size);
     left: 0;
     right: 0;
     bottom: 0;
+    background: black;
+    color: white;
+    text-align: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#loading.done {
+    opacity: 0;
+    transition: opacity .4s ease-in;
+    pointer-events: none;
 }
 
 * {
