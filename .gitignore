@@ -7,3 +7,6 @@
 # misc
 yarn-debug.log*
 yarn-error.log*
+
+# for now
+assets

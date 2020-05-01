@@ -13,27 +13,24 @@ export class Engine {
         }
         Engine.loaded = false
 
-        const { showDebug, canvas, container } = config
-        Engine.debug = new Debugger(showDebug)
+        const { debug, canvas, container } = config
+        Engine.debug = new Debugger(debug || false)
         Engine.input = new Input()
-        Engine.canvas = new Canvas(canvas, container)
-        Engine.map = new Map()
-
-        Engine.canvas.addForRender(Engine.map)
+        Engine.map = new Map({ canvas, container })
+        Engine.map.load({ ...config })
         window.Engine = Engine //@todo: for testing only
     }
 
     static update(time) {
         Engine.debug.update(time)
         Engine.input.update(time)
-        Engine.canvas.update(time)
         Engine.map.update(time)
     }
 
     static render(time) {
         Engine.debug.render(time)
         Engine.input.render(time)
-        Engine.canvas.render(time)
+        Engine.map.render(time)
         if (!Engine.loaded) Engine.hideLoadScreen()
     }
 

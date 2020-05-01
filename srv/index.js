@@ -9,6 +9,8 @@ require('electron-reload')(path.join(__dirname, '../src'));
 //     electron: require(`${__dirname}/../node_modules/electron`)
 // });
 
+global.assetsDir = path.join(__dirname, '../assets/')
+
 function createWindow() {
     const mainWindow = new BrowserWindow({
         title: 'Hex Wars',

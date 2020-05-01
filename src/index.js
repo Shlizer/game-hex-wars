@@ -1,10 +1,12 @@
 import { initialize, run } from './Game/index.js'
+import cfg from './config.js'
+const { remote } = require("electron")
+window.assetsDir = remote.getGlobal("assetsDir")
 
 const config = {
-    showDebug: true,
     canvas: document.getElementById('mapCanvas'),
     container: document.getElementById('map')
 }
 
-initialize(config)
+initialize({ ...config, ...cfg, map: 'test' })
 run()
