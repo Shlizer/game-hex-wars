@@ -2,7 +2,7 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
 
-require('electron-reload')(path.join(__dirname, '../src'));
+// require('electron-reload')(path.join(__dirname, '../src'));
 // Enable live reload for Electron too
 // require('electron-reload')(path.join(__dirname, '../'), {
 //     // Note that the path to electron may vary according to the main file
@@ -18,7 +18,7 @@ function createWindow() {
         width: 1200,
         height: 700,
         alwaysOnTop: true,
-        frame: false,
+        // frame: false,
         show: false,
         resizable: false,
         fullscreenable: false,
@@ -27,7 +27,8 @@ function createWindow() {
         }
     })
 
-    mainWindow.loadFile(path.join(__dirname, '../src/index.html'))
+    // mainWindow.loadFile(path.join(__dirname, '../src/index.html'))
+    mainWindow.loadURL(`file://${__dirname}/../src/index.html`);
 
     // Open the DevTools.
     mainWindow.webContents.openDevTools()
