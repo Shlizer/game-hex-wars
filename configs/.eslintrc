@@ -1,0 +1,22 @@
+{
+  "rules": {
+    "object-curly-spacing": "off",
+    "no-console": "off",
+    "global-require": "off",
+    "import/no-dynamic-require": "off",
+    "space-before-function-paren": "off",
+    "no-prototype-builtins": "off",
+    "prefer-promise-reject-errors": "off",
+    "no-unused-vars": "off",
+    "indent": [
+      "error",
+      4,
+      {
+        "ignoredNodes": [
+          "TemplateLiteral"
+        ],
+        "SwitchCase": 1
+      }
+    ]
+  }
+}
