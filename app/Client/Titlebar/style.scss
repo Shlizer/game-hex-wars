@@ -1,0 +1,44 @@
+.titleBar {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2em;
+    line-height: 2em;
+    display: flex;
+    flex-direction: row;
+    color: #f0f0f0;
+    background: #3E3E42;
+
+    .title {
+        padding-left: 1em;
+        flex-grow: 1;
+        -webkit-app-region: drag;
+    }
+
+    .buttons {
+        padding-right: 1em;
+
+        .btn {
+            width: 1em;
+            height: 1em;
+            display: inline-block;
+            color: white;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.4);
+            transition: all ease-in-out 0.2s;
+
+            &:hover {
+                color: rgba(255, 255, 255, 0.8);
+            }
+
+            &:global(.fa-window-close) {
+                color: rgba(255, 255, 255, 0.1);
+
+                &:hover {
+                    color: rgba(255, 255, 255, 0.6);
+                }
+            }
+        }
+    }
+}

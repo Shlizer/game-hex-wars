@@ -1,15 +1,14 @@
 import React, { Fragment } from 'react';
 import { render } from 'react-dom';
 import { AppContainer as ReactHotAppContainer } from 'react-hot-loader';
-import './app.global.css';
+import Client from './Client';
 
 const AppContainer = process.env.PLAIN_HMR ? Fragment : ReactHotAppContainer;
-const Index = () => <div>Hello React!</div>
 
 document.addEventListener('DOMContentLoaded', () =>
   render(
     <AppContainer>
-      <Index />
+      <Client />
     </AppContainer>,
     document.getElementById('root')
   )
