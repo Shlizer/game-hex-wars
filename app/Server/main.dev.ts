@@ -9,8 +9,8 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import { autoUpdater } from 'electron-updater';
-import log from 'electron-log';
-import { Window } from './Server/window';
+import log from 'electron-log'
+import { Window } from './Window';
 
 export default class AppUpdater {
   constructor() {

@@ -2,10 +2,10 @@ import React from 'react'
 import { ipcRenderer } from 'electron';
 import styles from './style.scss';
 import Picker from './picker';
+import { MapConfig } from '../../../Store/definitions';
 
 export default class Menu extends React.Component {
-    state = { 
-        fetching: false,
+    state: {maps: MapConfig} = {
         maps: []
      }
   
@@ -23,7 +23,7 @@ export default class Menu extends React.Component {
     render() {
         return (
             <div className={styles.menu}>
-                {this.state.maps.map(data => <Picker {...data} />)}
+                {this.state.maps.map(data => <Picker key={data.info.name} {...data.info} />)}
             </div>
         )
     }

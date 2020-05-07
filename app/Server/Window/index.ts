@@ -1,7 +1,11 @@
 import path from 'path';
-// import AppUpdater from '../main.dev';
+import fs from 'fs-extra';
 import { app, BrowserWindow } from 'electron';
-import Map from './map';
+// import AppUpdater from '../main.dev';
+import Map from '../Map';
+import Store from '../../Store';
+
+const cfgPath = path.join(__dirname, '../../../config.json')
 
 export class Window {
     wndHandle: BrowserWindow | null = null;
@@ -11,7 +15,22 @@ export class Window {
         app.on('window-all-closed', () => (process.platform !== 'darwin') ? app.quit() : undefined);
         app.on('ready', this.createWindow);
         app.on('activate', this.recreate);
+        this.getCfg()
         Window.mapSrv = new Map()
+    }
+
+    getCfg() {
+        const config = {
+            debug: true,
+            assetDir: "%MAIN_PATH%/assets",
+            mapDir: "%ASSET_DIR%/maps",
+            tilesetDir: "%ASSET_DIR%/tileset"
+        }
+        if (fs.existsSync(cfgPath)) {
+            Object.assign(config, fs.readJSONSync(cfgPath))
+            console.log('Load custom config', config)
+        }
+        Store.setCfg(config)
     }
 
     installExtensions = async () => {
