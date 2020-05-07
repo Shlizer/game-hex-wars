@@ -1,0 +1,17 @@
+:root {
+  /** APP VARIABLES **/
+  --app-border: 1px solid #224461;
+  --app-titlebar-bg: #0C2339;
+  --app-titlebar-text: #5592BF;
+  --app-titlebar-font-name: 'Lato', 'Open Sans', sans-serif;
+  --app-titlebar-font-size: 1.1em;
+  --app-content-bg: #012;
+  --app-content-text: #fff;
+  --app-content-font-name: 'Lato', 'Open Sans', sans-serif;
+  --app-content-font-size: 1em;
+
+  /** MAP CHOOSER **/
+  --map-choose-background: #0C2339;
+  --map-choose-text: #5592BF;
+  --map-choose-text-author: #2C5475;
+}

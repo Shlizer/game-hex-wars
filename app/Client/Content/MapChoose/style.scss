@@ -7,8 +7,9 @@
     .picker {
         margin: .3em;
         padding: 1em;
-        background: rgb(0, 54, 75);
-        filter: grayscale(1);
+        background: var(--map-choose-background);
+        color: var(--map-choose-text);
+        filter: grayscale(.4);
         box-shadow: .1em .1em .1em rgba(0, 0, 0, 0.4);
         transition: all .1s ease-in;
         cursor: pointer;
@@ -25,13 +26,12 @@
 
         .author {
             font-size: 0.7em;
-            color: #999;
+            color: var(--map-choose-text-author);
             padding-left: .2em;
         }
 
         .description {
             margin-top: .2em;
-            color: #e0e0e0;
         }
     }
 }

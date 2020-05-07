@@ -7,8 +7,11 @@
     line-height: 2em;
     display: flex;
     flex-direction: row;
-    color: #f0f0f0;
-    background: #3E3E42;
+    font-family: var(--app-titlebar-font-name);
+    font-size: var(--app-titlebar-font-size);
+    background-color: var(--app-titlebar-bg);
+    color: var(--app-titlebar-text);
+    border: var(--app-border);
 
     .title {
         padding-left: 1em;
