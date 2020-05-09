@@ -1,10 +1,10 @@
 export type TypeDirs = {
-    asset: string,
-    map: string,
-    tileset: string
-}
+  asset: string;
+  map: string;
+  tileset: string;
+};
 
 export type TypeApp = {
-    debug: Boolean,
-    dir: TypeDirs
-}
+  debug: boolean;
+  dir: TypeDirs;
+};

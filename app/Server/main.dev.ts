@@ -9,8 +9,8 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import { autoUpdater } from 'electron-updater';
-import log from 'electron-log'
-import { Window } from './Window';
+import log from 'electron-log';
+import Window from './Window';
 
 export default class AppUpdater {
   constructor() {
@@ -24,6 +24,7 @@ if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
 }
-if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') require('electron-debug')();
+if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true')
+  require('electron-debug')();
 
-new Window()
+Window.init();

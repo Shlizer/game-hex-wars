@@ -1,11 +1,7 @@
 export default class Tileset {
-    tiles: HTMLCanvasElement[] = []
-    
-    load({info, tiles}: {info: string, tiles: ImageData[]}) {
-        info; tiles
-    }
+  tiles: HTMLCanvasElement[] = [];
 
-    getTile(name: string) {
-        name;
-    }
+  // load({ info, tiles }: { info: string; tiles: ImageData[] }) {}
+
+  // getTile(name: string) {}
 }

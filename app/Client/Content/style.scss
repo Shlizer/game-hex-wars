@@ -1,12 +1,12 @@
 .content {
-    position: relative;
-    flex-grow: 1;
-    overflow: hidden;
-    font-family: var(--app-content-font-name);
-    font-size: var(--app-content-font-size);
-    background-color: var(--app-content-bg);
-    color: var(--app-content-text);
-    border-left: var(--app-border);
-    border-right: var(--app-border);
-    border-bottom: var(--app-border);
+  position: relative;
+  flex-grow: 1;
+  overflow: hidden;
+  font-family: var(--app-content-font-name);
+  font-size: var(--app-content-font-size);
+  background-color: var(--app-content-bg);
+  color: var(--app-content-text);
+  border-left: var(--app-border);
+  border-right: var(--app-border);
+  border-bottom: var(--app-border);
 }

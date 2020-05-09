@@ -1,18 +1,21 @@
 import React from 'react';
+import { observer } from 'mobx-react';
+import { StoreContext } from '../Store';
 import MapChoose from './MapChoose';
 import Canvas from './Canvas';
-import Loading from './Loading';
 import styles from './style.scss';
 
-export default ({currentMap}: {currentMap: | undefined}) => {
+function Content() {
   return (
-    <div className={styles.content}>
-      {
-        currentMap
-          ? <Canvas />
-          : <MapChoose />
-      }
-      <Loading />
-    </div>
-  )
-};
+    <StoreContext.Consumer>
+      {store => (
+        <div className={styles.content}>
+          {store && store.current.map ? <Canvas /> : <MapChoose />}
+        </div>
+      )}
+    </StoreContext.Consumer>
+  );
+}
+
+Content.contextType = StoreContext;
+export default observer(Content);
