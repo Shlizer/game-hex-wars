@@ -2,21 +2,21 @@ import path from 'path';
 import fs from 'fs-extra';
 import { app, BrowserWindow } from 'electron';
 // import AppUpdater from '../main.dev';
-import Map from '../Map';
+import MapFetch from '../MapFetch';
 import Store from '../../Store';
 
 const cfgPath = path.join(__dirname, '../../../config.json')
 
 export class Window {
     wndHandle: BrowserWindow | null = null;
-    static mapSrv: Map | null = null;
+    static mapSrv: MapFetch | null = null;
 
     constructor() {
         app.on('window-all-closed', () => (process.platform !== 'darwin') ? app.quit() : undefined);
         app.on('ready', this.createWindow);
         app.on('activate', this.recreate);
         this.getCfg()
-        Window.mapSrv = new Map()
+        Window.mapSrv = new MapFetch()
     }
 
     getCfg() {
