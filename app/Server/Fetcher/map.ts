@@ -11,7 +11,7 @@ export default class MapFetch {
     ipcMain.on('map-list-request', (event: IpcMainEvent) =>
       event.reply('map-list-data', this.getList())
     );
-    ipcMain.on('map-layout-request', (event, { id }) =>
+    ipcMain.on('map-layout-request', (event: IpcMainEvent, { id }) =>
       event.reply('map-layout-data', this.getLayout(id))
     );
   }

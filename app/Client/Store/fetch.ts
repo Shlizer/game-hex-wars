@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint no-throw-literal: off */
 
 import { ipcRenderer, IpcRendererEvent } from 'electron';
@@ -8,7 +9,7 @@ type FetcherData = {
   key: string;
   data?: unknown;
   callback: (
-    data: unknown,
+    data: any,
     resolve: () => unknown,
     reject: () => unknown
   ) => unknown;
@@ -34,7 +35,11 @@ export default class Fetcher {
     const waitPromise = new Promise(resolve => {
       waitTimeout = window.setTimeout(() => {
         console.log('> timeout');
-        resolve(Fetcher.sendError('Zbyt długi okres oczekiwania'));
+        resolve(
+          Fetcher.sendError(
+            `Zbyt długi okres oczekiwania (${(wait / 1000).toFixed(0)}s)`
+          )
+        );
       }, wait);
     });
 
@@ -48,6 +53,7 @@ export default class Fetcher {
           if (after) after();
         }
       );
+      console.log(`reaching ${key}-request`);
       ipcRenderer.send(`${key}-request`, data);
     });
 

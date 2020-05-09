@@ -5,7 +5,14 @@ export type TypeInfo = {
   author: string;
 };
 
-export type TypeLayout = {};
+export type TypeLayout = {
+  layers: {
+    name: string;
+    tileset: string;
+    size: [number, number];
+    tiles: number[][];
+  }[];
+};
 
 export type TypeMap = {
   info: TypeInfo;

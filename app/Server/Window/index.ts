@@ -4,6 +4,7 @@ import { app, BrowserWindow, globalShortcut } from 'electron';
 // import AppUpdater from '../main.dev';
 import ErrorHandler from '../Error';
 import FetchMap from '../Fetcher/map';
+import FetchTileset from '../Fetcher/tileset';
 import Options from '../options';
 
 const cfgPath = path.join(__dirname, '../../../config.json');
@@ -33,6 +34,7 @@ export default class Window {
     app.on('activate', Window.recreate);
     Window.getCfg();
     FetchMap.init();
+    FetchTileset.init();
   }
 
   static getCfg() {

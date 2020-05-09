@@ -1,4 +1,4 @@
-export type TilesetConfig = {
+export type Config = {
   name: string;
   description: string;
   author: string;

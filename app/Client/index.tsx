@@ -14,6 +14,7 @@ const store = new Store();
 
 ipcRenderer.on('error', (_error: unknown, msg: string) => {
   ToastsStore.error(msg);
+  console.log(`%c${msg}`, 'color:red');
 });
 
 document.addEventListener('app-error', msg => {

@@ -3,6 +3,6 @@
   "dir": {
     "asset": "%MAIN_PATH%/resources",
     "map": "%ASSET_DIR%/maps",
-    "tileset": "%ASSET_DIR%/tileset"
+    "tileset": "%ASSET_DIR%/tilesets"
   }
 }
