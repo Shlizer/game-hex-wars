@@ -1,8 +1,8 @@
 /* eslint class-methods-use-this: off */
 
-import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { TypeInfo, TypeLayout } from '../../../Definitions/map';
 import Loader from '../Loader';
+import Fetcher from '../fetch';
 
 export default class MapObject {
   selected = false;
@@ -35,42 +35,36 @@ export default class MapObject {
   }
 
   async loadMapLayout(): Promise<boolean> {
-    return new Promise(resolve => {
-      Loader.add('map-load-layout', 'Schemat mapy');
-      ipcRenderer.send('map-layout-request', { id: this.info.id });
-      ipcRenderer.on(
-        'map-layout-data',
-        (_event: IpcRendererEvent, layout?: TypeLayout) => {
-          if (layout) {
-            console.log(layout);
-            Loader.remove('map-load-layout');
-            resolve(true);
-          } else {
-            Loader.remove('map-load-layout');
-            resolve(false);
-          }
-        }
-      );
+    const before = () => Loader.add('map-load-layout', 'Schemat mapy');
+    const final = () => Loader.remove('map-load-layout');
+    const callback = (layout: unknown, resolve: (v: boolean) => unknown) => {
+      console.log(layout);
+      resolve(!!layout);
+    };
+
+    return Fetcher.create({
+      key: 'map-layout',
+      data: { id: this.info.id },
+      final,
+      before,
+      callback
     });
   }
 
   async loadTilesets(): Promise<boolean> {
-    return new Promise(resolve => {
-      Loader.add('map-load-tilesets', 'Dane graficzne kafli');
-      ipcRenderer.send('map-layout-tilesets', { id: this.info.id });
-      ipcRenderer.on(
-        'map-layout-tilesets',
-        (_event: IpcRendererEvent, tilesets?: []) => {
-          if (tilesets) {
-            console.log(tilesets);
-            Loader.remove('map-load-tilesets');
-            resolve(true);
-          } else {
-            Loader.remove('map-load-tilesets');
-            resolve(false);
-          }
-        }
-      );
+    const before = () => Loader.add('map-load-tsets', 'Dane graficzne kafli');
+    const final = () => Loader.remove('map-load-tsets');
+    const callback = (tilesets: unknown, resolve: (v: boolean) => unknown) => {
+      console.log(tilesets);
+      resolve(!!tilesets);
+    };
+
+    return Fetcher.create({
+      key: 'map-tilesets',
+      data: { id: this.info.id },
+      final,
+      before,
+      callback
     });
   }
 }

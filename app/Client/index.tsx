@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import React, { Fragment } from 'react';
 import { render } from 'react-dom';
 import { AppContainer as ReactHotAppContainer } from 'react-hot-loader';
@@ -11,11 +11,16 @@ import './main.global.css';
 
 const AppContainer = process.env.PLAIN_HMR ? Fragment : ReactHotAppContainer;
 const store = new Store();
-const errorHandler = (_error: unknown, msg: string) => {
-  ToastsStore.error(msg);
-};
 
-ipcRenderer.on('error', errorHandler);
+ipcRenderer.on('error', (_error: unknown, msg: string) => {
+  ToastsStore.error(msg);
+});
+
+document.addEventListener('app-error', msg => {
+  if (msg instanceof CustomEvent) {
+    ipcRenderer.sendTo(remote.getCurrentWebContents().id, 'error', msg.detail);
+  }
+});
 
 document.addEventListener('DOMContentLoaded', () =>
   render(

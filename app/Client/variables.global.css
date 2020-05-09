@@ -1,6 +1,7 @@
 :root {
   /** APP VARIABLES **/
   --app-border: 1px solid #224461;
+  --app-titlebar-size: 2em;
   --app-titlebar-bg: #0c2339;
   --app-titlebar-text: #5592bf;
   --app-titlebar-font-name: 'Lato', 'Open Sans', sans-serif;

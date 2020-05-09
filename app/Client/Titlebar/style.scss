@@ -1,47 +1,46 @@
 .titleBar {
-    position: relative;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2em;
-    line-height: 2em;
-    display: flex;
-    flex-direction: row;
-    font-family: var(--app-titlebar-font-name);
-    font-size: var(--app-titlebar-font-size);
-    background-color: var(--app-titlebar-bg);
-    color: var(--app-titlebar-text);
-    border: var(--app-border);
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--app-titlebar-size);
+  line-height: var(--app-titlebar-size);
+  display: flex;
+  flex-direction: row;
+  font-family: var(--app-titlebar-font-name);
+  font-size: var(--app-titlebar-font-size);
+  background-color: var(--app-titlebar-bg);
+  color: var(--app-titlebar-text);
+  border: var(--app-border);
 
-    .title {
-        padding-left: 1em;
-        flex-grow: 1;
-        -webkit-app-region: drag;
-    }
+  .title {
+    padding-left: 1em;
+    flex-grow: 1;
+    -webkit-app-region: drag;
+  }
 
-    .buttons {
-        padding-right: 1em;
+  .buttons {
+    padding-right: 1em;
 
-        .btn {
-            width: 1em;
-            height: 1em;
-            display: inline-block;
-            color: white;
-            cursor: pointer;
-            color: rgba(255, 255, 255, 0.4);
-            transition: all ease-in-out 0.2s;
+    .btn {
+      width: var(--app-titlebar-size);
+      height: var(--app-titlebar-size);
+      display: inline-block;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.4);
+      transition: all ease-in-out 0.2s;
 
-            &:hover {
-                color: rgba(255, 255, 255, 0.8);
-            }
+      &:hover {
+        color: rgba(255, 255, 255, 0.8);
+      }
 
-            &:global(.fa-window-close) {
-                color: rgba(255, 255, 255, 0.1);
+      &:global(.fa-window-close) {
+        color: rgba(255, 255, 255, 0.1);
 
-                &:hover {
-                    color: rgba(255, 255, 255, 0.6);
-                }
-            }
+        &:hover {
+          color: rgba(255, 255, 255, 0.6);
         }
+      }
     }
+  }
 }
