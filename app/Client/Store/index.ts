@@ -18,7 +18,7 @@ export default class Store {
   selectMap(id: string) {
     this.map.deselectAll();
     this.current.map = this.map.select(id);
-    if (this.current.map) console.log('current map -> ', id);
+    if (this.current.map) this.current.map.load();
   }
 }
 
@@ -26,5 +26,5 @@ decorate(Store, {
   current: observable
 });
 
-export const StoreContext = React.createContext<Store>(new Store());
+export const StoreContext = React.createContext<Store | undefined>(undefined);
 StoreContext.displayName = 'ClientStore';

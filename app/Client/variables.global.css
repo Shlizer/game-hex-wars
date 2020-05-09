@@ -13,13 +13,13 @@
   /** LOADER **/
   --loader-size: 25em;
   --loader-border: var(--app-border);
-  --loader-title-background: var(--app-titlebar-bg);
+  --loader-title-bg: var(--app-titlebar-bg);
   --loader-title-text: var(--app-titlebar-text);
-  --loader-content-background: var(--app-content-bg);
+  --loader-content-bg: var(--app-content-bg);
   --loader-content-text: var(--map-choose-text-author);
 
   /** MAP CHOOSER **/
-  --map-choose-background: #0c2339;
+  --map-choose-bg: #0c2339;
   --map-choose-text: #5592bf;
   --map-choose-text-author: #2c5475;
 }

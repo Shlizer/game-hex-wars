@@ -7,9 +7,22 @@ import Picker from './picker';
 import styles from './style.scss';
 
 class Menu extends React.Component {
+  componentDidMount() {
+    document.addEventListener('keyup', this.onReload);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keyup', this.onReload);
+  }
+
+  onReload = (e: KeyboardEvent) => {
+    if (e.key === 'r' && e.ctrlKey) {
+      this.context.map.loadList();
+    }
+  };
+
   get list(): Map[] {
     const { map } = this.context;
-
     return map && map.list ? map.list : [];
   }
 

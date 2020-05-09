@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, globalShortcut } from 'electron';
 // import AppUpdater from '../main.dev';
 import FetchMap from '../Fetcher/map';
 import Options from '../options';
@@ -72,6 +72,14 @@ export default class Window {
     });
 
     Window.wndHandle.loadURL(`file://${__dirname}/app.html`);
+
+    /** Handle reload shortcuts */
+    Window.wndHandle.on('focus', () => {
+      globalShortcut.registerAll(['CommandOrControl+R', 'F5'], () => {});
+    });
+    Window.wndHandle.on('blur', () => {
+      globalShortcut.unregisterAll();
+    });
 
     // @TODO: Use 'ready-to-show' event
     //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event

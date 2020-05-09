@@ -3,31 +3,27 @@
 import React from 'react';
 import { decorate, computed } from 'mobx';
 import { observer } from 'mobx-react';
-import Loader from '../../Store/loader';
+import Loader from '../../Store/Loader';
 import styles from './style.scss';
 
 class Loading extends React.Component {
-  lastSeen = '';
+  msg = '';
 
   get classes() {
     return [
       styles.loading,
-      Loader.loadData.length ? styles.opened : styles.closed
+      Loader.list.length ? styles.opened : styles.closed
     ].join(' ');
   }
 
-  get getInfo() {
-    if (Loader.loadData[0]) {
-      this.lastSeen = Loader.loadData[0].text || '...';
-    }
-    return this.lastSeen;
-  }
-
   get loadWindow() {
+    if (Loader.list.length && Loader.list[0]) {
+      this.msg = Loader.list[0].text || '...';
+    }
     return (
       <div className={styles.loadWindow}>
         <div className={styles.header}>Ładowanie</div>
-        <div className={styles.info}>{this.getInfo}</div>
+        <div className={styles.info}>{this.msg}</div>
       </div>
     );
   }
@@ -39,6 +35,6 @@ class Loading extends React.Component {
 
 decorate(Loading, {
   classes: computed,
-  getInfo: computed
+  loadWindow: computed
 });
 export default observer(Loading);
