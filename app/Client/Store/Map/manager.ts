@@ -2,15 +2,20 @@ import { action, decorate, observable } from 'mobx';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { TypeInfo } from '../../../Definitions/map';
 import Map from './map';
+import Loader from '../loader';
 
 export default class MapManager {
   list: Map[] = [];
 
   constructor() {
+    Loader.add('map-list', 'Trwa ładowanie listy map');
     ipcRenderer.send('map-list-request');
     ipcRenderer.on(
       'map-list-data',
-      (event: IpcRendererEvent, maps: TypeInfo[]) => this.addMaps(maps)
+      (event: IpcRendererEvent, maps: TypeInfo[]) => {
+        this.addMaps(maps);
+        Loader.remove('map-list');
+      }
     );
   }
 

@@ -1,8 +1,8 @@
 :root {
   /** APP VARIABLES **/
   --app-border: 1px solid #224461;
-  --app-titlebar-bg: #0C2339;
-  --app-titlebar-text: #5592BF;
+  --app-titlebar-bg: #0c2339;
+  --app-titlebar-text: #5592bf;
   --app-titlebar-font-name: 'Lato', 'Open Sans', sans-serif;
   --app-titlebar-font-size: 1.1em;
   --app-content-bg: #012;
@@ -10,8 +10,16 @@
   --app-content-font-name: 'Lato', 'Open Sans', sans-serif;
   --app-content-font-size: 1em;
 
+  /** LOADER **/
+  --loader-size: 25em;
+  --loader-border: var(--app-border);
+  --loader-title-background: var(--app-titlebar-bg);
+  --loader-title-text: var(--app-titlebar-text);
+  --loader-content-background: var(--app-content-bg);
+  --loader-content-text: var(--map-choose-text-author);
+
   /** MAP CHOOSER **/
-  --map-choose-background: #0C2339;
-  --map-choose-text: #5592BF;
-  --map-choose-text-author: #2C5475;
+  --map-choose-background: #0c2339;
+  --map-choose-text: #5592bf;
+  --map-choose-text-author: #2c5475;
 }

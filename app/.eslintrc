@@ -8,6 +8,7 @@
     "jsx-a11y/no-static-element-interactions": "off",
     "react/jsx-props-no-spreading": "off",
     "react/destructuring-assignment": "off",
+    "react/prefer-stateless-function": "off",
     "react/jsx-indent-props": ["error", 2],
     "indent": ["error", 2],
     "react/jsx-indent": ["error", 2]

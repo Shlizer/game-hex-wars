@@ -1,0 +1,41 @@
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: all 0.3s;
+
+  &.opened {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  &.closed {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .loadWindow {
+    position: relative;
+    width: var(--loader-size);
+    border: var(--loader-border);
+
+    .header {
+      background: var(--loader-title-bg);
+      color: var(--loader-title-text);
+      font-size: 1.1em;
+      padding: 0.4em;
+    }
+
+    .info {
+      background: var(--loader-content-background);
+      color: var(--loader-content-text);
+      padding: 0.4em;
+    }
+  }
+}
