@@ -1,12 +1,15 @@
 /* eslint class-methods-use-this: off */
 
-import { TypeInfo } from '../../../Definitions/map';
+import { ipcRenderer, IpcRendererEvent } from 'electron';
+import { TypeInfo, TypeLayout } from '../../../Definitions/map';
 import Loader from '../Loader';
 
 export default class MapObject {
   selected = false;
 
   info: TypeInfo;
+
+  layout: TypeLayout | undefined;
 
   constructor(info: TypeInfo) {
     this.info = info;
@@ -21,26 +24,53 @@ export default class MapObject {
     this.selected = false;
   }
 
-  load() {
-    this.loadMapLayout()
-      .then(() => this.loadTilesets())
-      .catch(e => console.error(e));
+  async load(): Promise<boolean> {
+    if (await this.loadMapLayout()) {
+      if (await this.loadTilesets()) {
+        console.log('done loading');
+        return true;
+      }
+    }
+    return false;
   }
 
-  loadMapLayout(): Promise<unknown> {
-    const promise = new Promise(resolve => {
-      setTimeout(() => {
-        resolve(this.info);
-      }, 1500);
+  async loadMapLayout(): Promise<boolean> {
+    return new Promise(resolve => {
+      Loader.add('map-load-layout', 'Schemat mapy');
+      ipcRenderer.send('map-layout-request', { id: this.info.id });
+      ipcRenderer.on(
+        'map-layout-data',
+        (_event: IpcRendererEvent, layout?: TypeLayout) => {
+          if (layout) {
+            console.log(layout);
+            Loader.remove('map-load-layout');
+            resolve(true);
+          } else {
+            Loader.remove('map-load-layout');
+            resolve(false);
+          }
+        }
+      );
     });
-    Loader.add('map-load-layout', 'Schemat mapy', promise);
-    return promise;
   }
 
-  loadTilesets() {
-    Loader.add('map-load-tilesets', 'Dane graficzne kafli');
-    setTimeout(() => {
-      Loader.remove('map-load-tilesets');
-    }, 1500);
+  async loadTilesets(): Promise<boolean> {
+    return new Promise(resolve => {
+      Loader.add('map-load-tilesets', 'Dane graficzne kafli');
+      ipcRenderer.send('map-layout-tilesets', { id: this.info.id });
+      ipcRenderer.on(
+        'map-layout-tilesets',
+        (_event: IpcRendererEvent, tilesets?: []) => {
+          if (tilesets) {
+            console.log(tilesets);
+            Loader.remove('map-load-tilesets');
+            resolve(true);
+          } else {
+            Loader.remove('map-load-tilesets');
+            resolve(false);
+          }
+        }
+      );
+    });
   }
 }

@@ -18,7 +18,15 @@ export default class Store {
   selectMap(id: string) {
     this.map.deselectAll();
     this.current.map = this.map.select(id);
-    if (this.current.map) this.current.map.load();
+    if (this.current.map)
+      this.current.map
+        .load()
+        .then(loaded => (!loaded ? this.deselectMap() : undefined))
+        .catch(() => this.deselectMap());
+  }
+
+  deselectMap() {
+    this.current.map = undefined;
   }
 }
 

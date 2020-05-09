@@ -3,12 +3,16 @@
 import fs from 'fs-extra';
 import { ipcMain, IpcMainEvent } from 'electron';
 import Options from '../options';
-import { TypeInfo } from '../../Definitions/map';
+import ErrorHandler from '../Error';
+import { TypeInfo, TypeLayout } from '../../Definitions/map';
 
 export default class MapFetch {
   static init() {
     ipcMain.on('map-list-request', (event: IpcMainEvent) =>
       event.reply('map-list-data', this.getList())
+    );
+    ipcMain.on('map-layout-request', (event, { id }) =>
+      event.reply('map-layout-data', this.getLayout(id))
     );
   }
 
@@ -39,11 +43,25 @@ export default class MapFetch {
           const info = { id: mapDir, ...fs.readJSONSync(paths.info) };
           maps.push(info);
         } else {
-          throw `No map info for ${mapDir}`;
+          ErrorHandler.send(new Error(`No map info for ${mapDir}`));
         }
       });
       return maps;
     }
-    throw `Cannot find maps dir. ${this.getMainDir}`;
+    ErrorHandler.send(new Error(`Cannot find maps dir. ${this.getMainDir}`));
+    return [];
+  }
+
+  static getLayout(id: string): TypeLayout | null {
+    if (fs.existsSync(this.getMainDir)) {
+      const paths = this.getDirs(id);
+      if (fs.existsSync(paths.map) && fs.existsSync(paths.layout)) {
+        return fs.readJSONSync(paths.layout);
+      }
+      ErrorHandler.send(new Error(`No map info for ${id}`));
+      return null;
+    }
+    ErrorHandler.send(new Error(`Cannot find maps dir. ${this.getMainDir}`));
+    return null;
   }
 }

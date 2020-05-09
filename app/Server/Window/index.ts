@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import { app, BrowserWindow, globalShortcut } from 'electron';
 // import AppUpdater from '../main.dev';
+import ErrorHandler from '../Error';
 import FetchMap from '../Fetcher/map';
 import Options from '../options';
 
@@ -19,6 +20,12 @@ export default class Window {
   static wndHandle: BrowserWindow | null = null;
 
   static init() {
+    process.on('uncaughtException', (error: unknown) => {
+      console.log('UNHANDLED EXCEPTION >>> ', error);
+      ErrorHandler.send(
+        error instanceof Error ? error : new Error('Unknown error')
+      );
+    });
     app.on('window-all-closed', () =>
       process.platform !== 'darwin' ? app.quit() : undefined
     );
@@ -71,6 +78,8 @@ export default class Window {
           : { preload: path.join(__dirname, 'dist/renderer.prod.js') }
     });
 
+    ErrorHandler.setWindow(Window.wndHandle);
+
     Window.wndHandle.loadURL(`file://${__dirname}/app.html`);
 
     /** Handle reload shortcuts */
@@ -85,7 +94,7 @@ export default class Window {
     //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
     Window.wndHandle.webContents.on('did-finish-load', () => {
       if (!Window.wndHandle) {
-        throw new Error('"mainWindow" is not defined');
+        throw new Error('"wndHandle" is not defined');
       }
       if (process.env.START_MINIMIZED) {
         Window.wndHandle.minimize();
