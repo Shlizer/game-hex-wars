@@ -1,6 +1,8 @@
 {
-    "debug": true,
-    "assetDir": "%MAIN_PATH%/resources",
-    "mapDir": "%ASSET_DIR%/maps",
-    "tilesetDir": "%ASSET_DIR%/tileset"
+  "debug": true,
+  "dir": {
+    "asset": "%MAIN_PATH%/resources",
+    "map": "%ASSET_DIR%/maps",
+    "tileset": "%ASSET_DIR%/tileset"
+  }
 }

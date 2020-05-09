@@ -1,11 +1,10 @@
 import React from 'react'
 import styles from './style.scss';
-import Store from '../../../Store';
-import { MapInfoConfig } from '../../../Store/definitions';
+import { TypeInfo } from '../../../Definitions/map';
 
-export default function Picker(props : MapInfoConfig) {
+export default function Picker(props : TypeInfo) {
     const onSelect = () => {
-        Store.selectMap(props.id || '');
+      console.log('SELECT ', props.id)
     }
 
     return (

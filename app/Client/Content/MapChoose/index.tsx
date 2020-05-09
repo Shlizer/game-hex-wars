@@ -2,21 +2,21 @@ import React from 'react'
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import styles from './style.scss';
 import Picker from './picker';
-import { MapInfoConfig } from '../../../Store/definitions';
+import { TypeInfo } from '../../../Definitions/map';
 
 export default class Menu extends React.Component {
-    state: {maps: MapInfoConfig[]} = {
+    state: {maps: TypeInfo[]} = {
         maps: []
      }
-  
+
      componentDidMount() {
         ipcRenderer.send('map-list-request');
-        ipcRenderer.on('map-list-data', (event: IpcRendererEvent, maps: MapInfoConfig[]) => this.setState({maps}))
+        ipcRenderer.on('map-list-data', (event: IpcRendererEvent, maps: TypeInfo[]) => this.setState({maps}))
     }
 
     get noMaps() {
         return (
-            <div className={styles.noMaps}>Brak map do wyświetlenia</div>
+            <div className={'styles.noMaps'}>Brak map do wyświetlenia</div>
         )
     }
 

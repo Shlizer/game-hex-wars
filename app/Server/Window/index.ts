@@ -2,35 +2,37 @@ import path from 'path';
 import fs from 'fs-extra';
 import { app, BrowserWindow } from 'electron';
 // import AppUpdater from '../main.dev';
-import MapFetch from '../MapFetch';
-import Store from '../../Store';
+import FetchMap from '../Fetcher/map';
+import Options from '../options';
 
 const cfgPath = path.join(__dirname, '../../../config.json')
+const defaultCfg = {
+    debug: true,
+    dir: {
+        asset: "%MAIN_PATH%/assets",
+        map: "%ASSET_DIR%/maps",
+        tileset: "%ASSET_DIR%/tileset"
+    }
+}
 
 export class Window {
     wndHandle: BrowserWindow | null = null;
-    static mapSrv: MapFetch | null = null;
 
     constructor() {
         app.on('window-all-closed', () => (process.platform !== 'darwin') ? app.quit() : undefined);
         app.on('ready', this.createWindow);
         app.on('activate', this.recreate);
         this.getCfg()
-        Window.mapSrv = new MapFetch()
+        FetchMap.init()
     }
 
     getCfg() {
-        const config = {
-            debug: true,
-            assetDir: "%MAIN_PATH%/assets",
-            mapDir: "%ASSET_DIR%/maps",
-            tilesetDir: "%ASSET_DIR%/tileset"
-        }
+        const config = Object.assign({}, defaultCfg)
         if (fs.existsSync(cfgPath)) {
             Object.assign(config, fs.readJSONSync(cfgPath))
             console.log('Load custom config', config)
         }
-        Store.setCfg(config)
+        Options.setCfg(config)
     }
 
     installExtensions = async () => {
