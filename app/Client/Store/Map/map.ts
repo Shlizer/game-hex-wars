@@ -2,6 +2,7 @@
 
 import { TypeInfo, TypeLayout } from '../../../Definitions/map';
 import { Config as TSConfig } from '../../../Definitions/tileset';
+import TSManager from '../Tileset/manager';
 import Loader from '../Loader';
 import Fetcher from '../fetch';
 
@@ -64,9 +65,12 @@ export default class MapObject {
   async loadTilesets(): Promise<boolean> {
     const before = () => Loader.add('map-load-tsets', 'Dane graficzne kafli');
     const final = () => Loader.remove('map-load-tsets');
-    const callback = (tilesets: TSConfig, resolve: (v: boolean) => void) => {
-      console.log(tilesets);
-      resolve(!!tilesets);
+    const callback = (tilesets: TSConfig[], resolve: (v: boolean) => void) => {
+      TSManager.load(tilesets)
+        .then(() => resolve(!!tilesets))
+        .catch((err: Error) =>
+          document.dispatchEvent(new CustomEvent('app-error', { detail: err }))
+        );
     };
 
     console.log(this.getTilesets());

@@ -20,6 +20,15 @@ export default class Loader {
       });
   }
 
+  static prepend(key: string, text?: string, promise?: Promise<unknown>) {
+    Loader.list.unshift({ key, text, promise });
+    if (promise)
+      promise.then(value => {
+        Loader.remove(key);
+        return value;
+      });
+  }
+
   static remove(key: string) {
     const index = Loader.list.findIndex(data => data.key === key);
     Loader.list.splice(index, 1);

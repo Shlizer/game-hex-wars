@@ -23,7 +23,11 @@ class Loading extends React.Component {
     return (
       <div className={styles.loadWindow}>
         <div className={styles.header}>Ładowanie</div>
-        <div className={styles.info}>{this.msg}</div>
+        <div
+          className={styles.info}
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: this.msg }}
+        />
       </div>
     );
   }

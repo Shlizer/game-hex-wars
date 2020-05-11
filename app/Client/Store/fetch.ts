@@ -34,7 +34,6 @@ export default class Fetcher {
     let waitTimeout: number;
     const waitPromise = new Promise(resolve => {
       waitTimeout = window.setTimeout(() => {
-        console.log('> timeout');
         resolve(
           Fetcher.sendError(
             `Zbyt długi okres oczekiwania (${(wait / 1000).toFixed(0)}s)`

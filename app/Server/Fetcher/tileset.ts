@@ -6,7 +6,20 @@ import Options from '../options';
 import ErrorHandler from '../Error';
 import { Config } from '../../Definitions/tileset';
 
-export default class TilesetFetch {
+const defaults = {
+  main: {
+    name: '',
+    description: '',
+    author: '',
+    grouped: true,
+    file: 'tileset.png',
+    extension: 'png'
+  },
+  offset: { top: 0, left: 0, right: 0, bottom: 0 },
+  tiles: { name: '', description: '' }
+};
+
+export default class TSFetch {
   static init() {
     ipcMain.on(
       'map-tilesets-request',
@@ -31,12 +44,14 @@ export default class TilesetFetch {
 
     if (fs.existsSync(this.getMainDir)) {
       tilesets.forEach((tsName: string) => {
-        console.log('getting ', tsName);
         const paths = this.getDirs(tsName);
 
         if (fs.existsSync(paths.tileset) && fs.existsSync(paths.info)) {
-          const info = fs.readJSONSync(paths.info);
-          list.push(info);
+          list.push({
+            id: tsName,
+            path: paths.tileset,
+            ...TSFetch.getConfig(fs.readJSONSync(paths.info))
+          });
         } else {
           ErrorHandler.send(new Error(`No tileset info for ${tsName}`));
         }
@@ -45,5 +60,17 @@ export default class TilesetFetch {
     }
     ErrorHandler.send(new Error(`Cannot find tileset dir. ${this.getMainDir}`));
     return [];
+  }
+
+  static getConfig(info: Config): Config {
+    const custom: Config = {
+      ...defaults.main,
+      ...info,
+      offset: { ...defaults.offset, ...(info.offset || {}) }
+    };
+    if (!custom.grouped && custom.tiles) {
+      custom.tiles = custom.tiles.map(tile => ({ ...defaults.tiles, ...tile }));
+    }
+    return custom;
   }
 }
