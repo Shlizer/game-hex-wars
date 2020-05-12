@@ -8,9 +8,8 @@ import Fetcher from '../fetch';
 
 export default class MapObject {
   selected = false;
-
+  initialized = false;
   info: TypeInfo;
-
   layout: TypeLayout | undefined;
 
   constructor(info: TypeInfo) {
@@ -80,4 +79,14 @@ export default class MapObject {
       callback
     });
   }
+
+  init() {
+    this.initialized = true;
+  }
+
+  update() {
+    if (!this.initialized) this.init();
+  }
+
+  render() {}
 }

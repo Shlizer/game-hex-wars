@@ -1,19 +1,19 @@
 import React from 'react';
 import { decorate, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import styles from './style.scss';
+import Store, { StoreContext } from '../../Store';
 import Engine from '../Engine';
 import Debug from '../debug';
+import styles from './style.scss';
 
 class Canvas extends React.Component {
   ref = React.createRef<HTMLCanvasElement>();
-
   engine?: Engine;
 
   componentDidMount() {
     window.requestAnimationFrame(this.checkSize);
-    if (this.ref.current) {
-      this.engine = new Engine(this.ref.current);
+    if (this.ref.current && this.context instanceof Store) {
+      this.engine = new Engine(this.ref.current, this.context);
     }
   }
 
@@ -50,4 +50,5 @@ decorate(Canvas, {
   engine: observable
 });
 
+Canvas.contextType = StoreContext;
 export default observer(Canvas);

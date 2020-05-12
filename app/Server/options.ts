@@ -2,7 +2,6 @@ import { TypeApp, TypeDirs } from '../Definitions/app';
 
 export default class Options {
   static debug = false;
-
   static dir: TypeDirs = { asset: '', map: '', tileset: '' };
 
   static setCfg(data: TypeApp) {

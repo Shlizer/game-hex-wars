@@ -4,12 +4,11 @@ import Map from './Map/map';
 import Manager from './Map/manager';
 
 export default class Store {
+  map: Manager;
   current: { map?: Map; player?: string } = {
     map: undefined,
     player: undefined
   };
-
-  map: Manager;
 
   constructor() {
     this.map = new Manager();

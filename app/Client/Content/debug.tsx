@@ -9,14 +9,13 @@ type Props = {
 };
 
 class Debug extends React.Component<Props> {
+  mounted = false;
   time: { start: number; now: number; fps: number; stamps: number[] } = {
     start: performance.now(),
     now: performance.now(),
     stamps: [],
     fps: 0
   };
-
-  mounted = false;
 
   componentDidMount() {
     this.mounted = true;
