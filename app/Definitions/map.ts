@@ -15,7 +15,7 @@ export type TypeInfo = {
 };
 
 export type TypeLayout = {
-  hex: {
+  size: {
     width: number;
     height: number;
   };
@@ -32,8 +32,3 @@ export type TypeLayout = {
     tiles: number[][];
   }[];
 };
-
-export type TypeMap = {
-  info: TypeInfo;
-  layout: TypeLayout;
-}[];

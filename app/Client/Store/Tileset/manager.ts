@@ -1,11 +1,11 @@
-import { Config } from '../../../Definitions/tileset';
+import { Tileset as TSConfig } from '../../../Definitions/tileset';
 import Tileset from './tileset';
 import Loader from '../Loader';
 
 export default class TSManager {
   list: Tileset[] = [];
 
-  static load(configs: Config[]): Promise<unknown> {
+  static load(configs: TSConfig[]): Promise<unknown> {
     Loader.add('map-tileset-load', 'Parsowanie tilesetów');
     const promises: Promise<Tileset>[] = [];
     configs.forEach(cfg => promises.push(TSManager.loadTileset(cfg)));
@@ -18,7 +18,7 @@ export default class TSManager {
       );
   }
 
-  static loadTileset(config: Config): Promise<Tileset> {
+  static loadTileset(config: TSConfig): Promise<Tileset> {
     return new Promise((resolve, reject) => {
       const ts = new Tileset(config);
       ts.loadGfx()

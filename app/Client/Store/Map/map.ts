@@ -1,7 +1,7 @@
 /* eslint class-methods-use-this: off */
 
 import { TypeInfo, TypeLayout } from '../../../Definitions/map';
-import { Config as TSConfig } from '../../../Definitions/tileset';
+import { Tileset as TSConfig } from '../../../Definitions/tileset';
 import TSManager from '../Tileset/manager';
 import Loader from '../Loader';
 import Fetcher from '../fetch';
@@ -22,7 +22,6 @@ export default class MapObject {
   }
 
   deselect() {
-    // this.unload();
     this.selected = false;
   }
 
@@ -73,7 +72,6 @@ export default class MapObject {
         );
     };
 
-    console.log(this.getTilesets());
     return Fetcher.create({
       key: 'map-tilesets',
       data: { id: this.info.id, tilesets: this.getTilesets() },

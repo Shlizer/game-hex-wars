@@ -1,11 +1,20 @@
 import React from 'react';
+import { decorate, observable } from 'mobx';
+import { observer } from 'mobx-react';
 import styles from './style.scss';
+import Engine from '../Engine';
+import Debug from '../debug';
 
-export default class Canvas extends React.Component {
+class Canvas extends React.Component {
   ref = React.createRef<HTMLCanvasElement>();
+
+  engine?: Engine;
 
   componentDidMount() {
     window.requestAnimationFrame(this.checkSize);
+    if (this.ref.current) {
+      this.engine = new Engine(this.ref.current);
+    }
   }
 
   get parent(): HTMLElement | null {
@@ -25,6 +34,20 @@ export default class Canvas extends React.Component {
   };
 
   render() {
-    return <canvas className={styles.canvas} ref={this.ref} />;
+    return (
+      <>
+        <canvas className={styles.canvas} ref={this.ref} />
+        {this.ref.current && this.engine ? (
+          <Debug canvas={this.ref.current} engine={this.engine} />
+        ) : null}
+      </>
+    );
   }
 }
+
+decorate(Canvas, {
+  ref: observable,
+  engine: observable
+});
+
+export default observer(Canvas);

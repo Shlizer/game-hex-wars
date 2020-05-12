@@ -1,13 +1,16 @@
 /* eslint-disable promise/always-return */
 /* eslint class-methods-use-this: off */
 /* eslint no-loop-func: off */
-import { Config } from '../../../Definitions/tileset';
+import {
+  Tileset as TSConfig,
+  Tile as TConfig
+} from '../../../Definitions/tileset';
 import Loader from '../Loader';
 
 export default class TilesetObject {
-  config: Config;
+  config: TSConfig;
 
-  constructor(cfg: Config) {
+  constructor(cfg: TSConfig) {
     this.config = cfg;
   }
 
@@ -45,8 +48,7 @@ export default class TilesetObject {
           // eslint-disable-next-line no-await-in-loop
           await this.loadFile(filename)
             .then(image => {
-              if (!this.config.tiles) this.config.tiles = [];
-              this.config.tiles[num] = { file: filename, image };
+              this.setImage(num.toString(), filename, image);
               // eslint-disable-next-line no-plusplus
               num++;
             })
@@ -66,5 +68,29 @@ export default class TilesetObject {
       image.onerror = () => reject(image);
       image.src = path;
     });
+  }
+
+  setImage(id: string, filename: string, image: HTMLImageElement) {
+    if (!this.config.tiles) this.config.tiles = {};
+    this.config.tiles[id] = {
+      ...(this.config.tiles[id] ? this.config.tiles[id] : {}),
+      file: filename,
+      id,
+      image
+    };
+    this.config.tiles[id].imageData = this.getImageData(this.config.tiles[id]);
+  }
+
+  getImageData(tile: TConfig): ImageData | undefined {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+
+    if (tile.image && context) {
+      canvas.width = tile.image.width;
+      canvas.height = tile.image.height;
+      context.drawImage(tile.image, 0, 0);
+      return context.getImageData(0, 0, canvas.width, canvas.height);
+    }
+    throw new Error(`Cannot set image context for ${tile.id}`);
   }
 }
