@@ -8,8 +8,8 @@ It's my test project on making JS desktop game using React for UI, Electron for 
 
 All game mechanics and basic info about project are stored in [**docs**](docs/index.md) folder.
 
-## 4. Author, contribute and license
+## Author, contribute and license
 
 **Author:** Krzysiek 'Shlizer' Hinc
 **Contribution:** none for now
-**License:** to be considered
+**License:** MIT

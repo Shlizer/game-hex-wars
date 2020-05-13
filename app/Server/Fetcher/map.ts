@@ -32,18 +32,22 @@ export default class MapFetch {
     const maps: TypeInfo[] = [];
 
     if (fs.existsSync(this.getMainDir)) {
-      fs.readdirSync(this.getMainDir).forEach((mapDir: string) => {
-        const paths = this.getDirs(mapDir);
+      fs.readdirSync(this.getMainDir).forEach((mapId: string) => {
+        const paths = this.getDirs(mapId);
 
         if (
           fs.existsSync(paths.map) &&
           fs.existsSync(paths.info) &&
           fs.existsSync(paths.layout)
         ) {
-          const info = { id: mapDir, ...fs.readJSONSync(paths.info) };
+          const info = {
+            ...fs.readJSONSync(paths.info),
+            id: mapId,
+            path: paths.map
+          };
           maps.push(info);
         } else {
-          ErrorHandler.send(new Error(`No map info for ${mapDir}`));
+          ErrorHandler.send(new Error(`No map info for ${mapId}`));
         }
       });
       return maps;

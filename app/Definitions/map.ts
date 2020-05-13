@@ -1,11 +1,12 @@
 export enum LayerType {
-  'TILE',
-  'BMP',
-  'PATH'
+  TILE = 'TILE',
+  BMP = 'BMP',
+  PATH = 'PATH'
 }
 
 export type TypeInfo = {
-  id?: string;
+  id?: string; // |-> added in code
+  path?: string; // |-> added in code
   name?: string;
   description?: string;
   author?: string;
@@ -14,21 +15,23 @@ export type TypeInfo = {
   screen?: string;
 };
 
+export type LayerData = {
+  type: LayerType;
+  alpha?: number;
+  offset?: [number, number];
+
+  // BMP
+  file: string;
+
+  // TILE
+  tileset: string;
+  tiles: (number | string)[][];
+};
+
 export type TypeLayout = {
   size: {
     width: number;
     height: number;
   };
-  layers: {
-    type: LayerType;
-    alpha?: number;
-    // BMP
-    size: [number, number];
-    offset?: [number, number];
-    file: string;
-    alphaColor?: [number, number, number];
-    // TILE
-    tileset: string;
-    tiles: number[][];
-  }[];
+  layers: LayerData[];
 };

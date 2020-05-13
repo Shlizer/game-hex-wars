@@ -1,7 +1,7 @@
 import React from 'react';
 import { decorate, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import Engine from './Engine';
+import Engine from '../Store/Engine';
 
 type Props = {
   canvas: HTMLCanvasElement;

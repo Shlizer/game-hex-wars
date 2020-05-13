@@ -1,6 +1,7 @@
 {
   "rules": {
     "no-console": "off",
+    "no-plusplus": "off",
     "global-require": "off",
     "import/no-dynamic-require": "off",
     "no-param-reassign": 0,

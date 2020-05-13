@@ -5,14 +5,19 @@ import { Tileset as TSConfig } from '../../../Definitions/tileset';
 import TSManager from '../Tileset/manager';
 import Loader from '../Loader';
 import Fetcher from '../fetch';
+import Layer from './layer';
 
 export default class MapObject {
   selected = false;
-  initialized = false;
+  loaded = false;
   info: TypeInfo;
-  layout: TypeLayout | undefined;
+  layout?: TypeLayout;
+
+  canvas: HTMLCanvasElement;
+  layers: Layer[] = [];
 
   constructor(info: TypeInfo) {
+    this.canvas = document.createElement('canvas');
     this.info = info;
   }
 
@@ -28,6 +33,7 @@ export default class MapObject {
     if (this.layout) {
       return this.layout.layers
         .map(layer => layer.tileset)
+        .filter(tileset => tileset)
         .filter((item, pos, arr) => arr.indexOf(item) === pos);
     }
     return [];
@@ -36,8 +42,11 @@ export default class MapObject {
   async load(): Promise<boolean> {
     if (await this.loadMapLayout()) {
       if (await this.loadTilesets()) {
-        console.log('done loading');
-        return true;
+        if (await this.loadLayers()) {
+          console.log('MAP LOADED');
+          this.loaded = true;
+          return true;
+        }
       }
     }
     return false;
@@ -80,13 +89,35 @@ export default class MapObject {
     });
   }
 
-  init() {
-    this.initialized = true;
+  async loadLayers(): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      Loader.add('map-load-layouts', 'Dane graficzne layoutów');
+
+      if (this.layout?.layers) {
+        const promises: Promise<boolean>[] = [];
+
+        this.layout.layers.forEach(async layerData => {
+          const layer = new Layer(layerData);
+          const layerPromise = layer.load(this.info.path || '');
+          promises.push(layerPromise);
+          layerPromise
+            .then(() => this.layers.push(layer))
+            .catch(err => reject(err));
+        });
+        Promise.all(promises)
+          .then(() => resolve(true))
+          .catch(() => reject(new Error('Błąd ładowania warstwy mapy')));
+      } else {
+        reject(new Error('Mapa nie ma żadnych warstw'));
+      }
+    }).finally(() => Loader.remove('map-load-layouts'));
   }
 
-  update() {
-    if (!this.initialized) this.init();
+  update(time: number) {
+    this.layers.map(layer => layer.update(time));
   }
 
-  render() {}
+  render(mainContext: CanvasRenderingContext2D) {
+    this.layers.map(layer => layer.render(mainContext));
+  }
 }

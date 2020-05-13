@@ -1,8 +1,8 @@
 import React from 'react';
-import { decorate, observable } from 'mobx';
+import { decorate, observable, computed } from 'mobx';
 import { observer } from 'mobx-react';
 import Store, { StoreContext } from '../../Store';
-import Engine from '../Engine';
+import Engine from '../../Store/Engine';
 import Debug from '../debug';
 import styles from './style.scss';
 
@@ -21,13 +21,19 @@ class Canvas extends React.Component {
     return this.ref.current ? this.ref.current.parentElement : null;
   }
 
+  get debug() {
+    return this.ref.current && this.engine ? (
+      <Debug canvas={this.ref.current} engine={this.engine} />
+    ) : null;
+  }
+
   checkSize = () => {
     if (this.ref.current && this.parent) {
       if (this.ref.current.width !== this.parent.clientWidth) {
-        this.ref.current.width = this.parent.clientWidth - 10;
+        this.ref.current.width = this.parent.clientWidth;
       }
       if (this.ref.current.height !== this.parent.clientHeight) {
-        this.ref.current.height = this.parent.clientHeight - 10;
+        this.ref.current.height = this.parent.clientHeight;
       }
     }
     window.requestAnimationFrame(this.checkSize);
@@ -37,15 +43,14 @@ class Canvas extends React.Component {
     return (
       <>
         <canvas className={styles.canvas} ref={this.ref} />
-        {this.ref.current && this.engine ? (
-          <Debug canvas={this.ref.current} engine={this.engine} />
-        ) : null}
+        {this.debug}
       </>
     );
   }
 }
 
 decorate(Canvas, {
+  debug: computed,
   ref: observable,
   engine: observable
 });

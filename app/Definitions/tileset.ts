@@ -1,9 +1,7 @@
 export type Tile = {
-  // --- only in code
-  id?: string;
-  image?: HTMLImageElement;
-  imageData?: ImageData;
-  // ---
+  id?: string; // |-> added in code
+  canvas?: HTMLCanvasElement; // |-> added in code
+
   file: string;
   name?: string;
   description?: string;
@@ -17,15 +15,13 @@ export type Tile = {
     right?: number;
     bottom?: number;
   };
-  alphaColor?: [number, number, number];
 };
 
 export type Tileset = {
-  // --- only in code
-  id?: string;
-  path?: string;
-  image?: HTMLImageElement;
-  // ---
+  id?: string; // |-> added in code
+  path?: string; // |-> added in code
+  image?: HTMLImageElement; // |-> added in code
+
   name?: string;
   description?: string;
   author?: string;
@@ -40,9 +36,10 @@ export type Tileset = {
     right?: number;
     bottom?: number;
   };
-  alphaColor?: [number, number, number];
+
   // for grouped
   file?: string;
+
   // for not grouped
   extension?: string;
   tiles?: {

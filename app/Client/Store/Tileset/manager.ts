@@ -1,9 +1,12 @@
-import { Tileset as TSConfig } from '../../../Definitions/tileset';
+import {
+  Tileset as TSConfig,
+  Tile as TConfig
+} from '../../../Definitions/tileset';
 import Tileset from './tileset';
 import Loader from '../Loader';
 
 export default class TSManager {
-  list: Tileset[] = [];
+  static list: Tileset[] = [];
 
   static load(configs: TSConfig[]): Promise<unknown> {
     Loader.add('map-tileset-load', 'Parsowanie tilesetów');
@@ -24,6 +27,16 @@ export default class TSManager {
       ts.loadGfx()
         .then(() => resolve(ts))
         .catch((err: Error) => reject(err));
+      this.list.push(ts);
     });
+  }
+
+  static getTile(
+    tilesetId: string,
+    tileId: string | number
+  ): TConfig | undefined {
+    return this.list
+      .find(tileset => tileset.config.id === tilesetId)
+      ?.getTile(tileId);
   }
 }

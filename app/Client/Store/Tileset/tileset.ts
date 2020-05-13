@@ -22,16 +22,16 @@ export default class TilesetObject {
     const loadPromise = this.config.grouped
       ? this.loadSingle()
       : this.loadMultiple();
-    return loadPromise.finally(() =>
-      Loader.remove(`map-tileset-load-${this.config.id}`)
-    );
+    return loadPromise.finally(() => {
+      Loader.remove(`map-tileset-load-${this.config.id}`);
+    });
   }
 
   async loadSingle(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.loadFile(`${this.config.path}/${this.config.file}`)
         .then(image => {
-          this.config.image = image;
+          // @todo: split tiles to separate canvases
           return resolve(true);
         })
         .catch(() => reject(new Error(`Cannot load file ${this.config.file}`)));
@@ -48,8 +48,7 @@ export default class TilesetObject {
           // eslint-disable-next-line no-await-in-loop
           await this.loadFile(filename)
             .then(image => {
-              this.setImage(num.toString(), filename, image);
-              // eslint-disable-next-line no-plusplus
+              this.setCanvas(num.toString(), filename, image);
               num++;
             })
             .catch(() => {
@@ -70,27 +69,33 @@ export default class TilesetObject {
     });
   }
 
-  setImage(id: string, filename: string, image: HTMLImageElement) {
+  setCanvas(id: string, filename: string, image: HTMLImageElement) {
     if (!this.config.tiles) this.config.tiles = {};
     this.config.tiles[id] = {
       ...(this.config.tiles[id] ? this.config.tiles[id] : {}),
       file: filename,
-      id,
-      image
+      id
     };
-    this.config.tiles[id].imageData = this.getImageData(this.config.tiles[id]);
+    this.config.tiles[id].canvas = this.getImageCanvas(
+      this.config.tiles[id],
+      image
+    );
   }
 
-  getImageData(tile: TConfig): ImageData | undefined {
+  getImageCanvas(tile: TConfig, image: HTMLImageElement): HTMLCanvasElement {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
 
-    if (tile.image && context) {
-      canvas.width = tile.image.width;
-      canvas.height = tile.image.height;
-      context.drawImage(tile.image, 0, 0);
-      return context.getImageData(0, 0, canvas.width, canvas.height);
+    if (image && context) {
+      canvas.width = image.width;
+      canvas.height = image.height;
+      context.drawImage(image, 0, 0);
+      return canvas;
     }
     throw new Error(`Cannot set image context for ${tile.id}`);
+  }
+
+  getTile(tileId: string | number): TConfig | undefined {
+    return this.config.tiles?.[tileId];
   }
 }
