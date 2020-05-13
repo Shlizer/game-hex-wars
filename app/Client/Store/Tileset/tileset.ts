@@ -1,16 +1,14 @@
 /* eslint-disable promise/always-return */
 /* eslint class-methods-use-this: off */
 /* eslint no-loop-func: off */
-import {
-  Tileset as TSConfig,
-  Tile as TConfig
-} from '../../../Definitions/tileset';
+import { TilesetConfig } from '../../../Definitions/tileset';
+import { TileConfig } from '../../../Definitions/tile';
 import Loader from '../Loader';
 
 export default class TilesetObject {
-  config: TSConfig;
+  config: TilesetConfig;
 
-  constructor(cfg: TSConfig) {
+  constructor(cfg: TilesetConfig) {
     this.config = cfg;
   }
 
@@ -82,7 +80,7 @@ export default class TilesetObject {
     );
   }
 
-  getImageCanvas(tile: TConfig, image: HTMLImageElement): HTMLCanvasElement {
+  getImageCanvas(tile: TileConfig, image: HTMLImageElement): HTMLCanvasElement {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
 
@@ -95,7 +93,7 @@ export default class TilesetObject {
     throw new Error(`Cannot set image context for ${tile.id}`);
   }
 
-  getTile(tileId: string | number): TConfig | undefined {
+  getTile(tileId: string | number): TileConfig | undefined {
     return this.config.tiles?.[tileId];
   }
 }

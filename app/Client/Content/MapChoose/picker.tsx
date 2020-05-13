@@ -1,9 +1,9 @@
 import React from 'react';
 import { StoreContext } from '../../Store';
-import { TypeInfo } from '../../../Definitions/map';
+import { MapInfo } from '../../../Definitions/map';
 import styles from './style.scss';
 
-export default class Picker extends React.Component<TypeInfo> {
+export default class Picker extends React.Component<MapInfo> {
   onSelect = () => {
     this.context.selectMap(this.props.id);
   };

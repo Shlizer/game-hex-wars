@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import { ipcMain, IpcMainEvent } from 'electron';
 import Options from '../options';
 import ErrorHandler from '../Error';
-import { TypeInfo, TypeLayout } from '../../Definitions/map';
+import { MapInfo, MapLayout } from '../../Definitions/map';
 
 export default class MapFetch {
   static init() {
@@ -28,8 +28,8 @@ export default class MapFetch {
     };
   }
 
-  static getList(): TypeInfo[] {
-    const maps: TypeInfo[] = [];
+  static getList(): MapInfo[] {
+    const maps: MapInfo[] = [];
 
     if (fs.existsSync(this.getMainDir)) {
       fs.readdirSync(this.getMainDir).forEach((mapId: string) => {
@@ -56,7 +56,7 @@ export default class MapFetch {
     return [];
   }
 
-  static getLayout(id: string): TypeLayout | null {
+  static getLayout(id: string): MapLayout | null {
     if (fs.existsSync(this.getMainDir)) {
       const paths = this.getDirs(id);
       if (fs.existsSync(paths.map) && fs.existsSync(paths.layout)) {

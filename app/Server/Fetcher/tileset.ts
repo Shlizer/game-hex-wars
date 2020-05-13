@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import { ipcMain, IpcMainEvent } from 'electron';
 import Options from '../options';
 import ErrorHandler from '../Error';
-import { Tileset as TSConfig } from '../../Definitions/tileset';
+import { TilesetConfig } from '../../Definitions/tileset';
 
 const defaults = {
   main: {
@@ -39,8 +39,9 @@ export default class TSFetch {
     };
   }
 
-  static getList(id: string, tilesets: string[]): TSConfig[] {
-    const list: TSConfig[] = [];
+  // @todo: load tilesets from map's dir if they exist there
+  static getList(_id: string, tilesets: string[]): TilesetConfig[] {
+    const list: TilesetConfig[] = [];
 
     if (fs.existsSync(this.getMainDir)) {
       tilesets.forEach((tsName: string) => {
@@ -62,8 +63,8 @@ export default class TSFetch {
     return [];
   }
 
-  static getConfig(info: TSConfig): TSConfig {
-    const custom: TSConfig = {
+  static getConfig(info: TilesetConfig): TilesetConfig {
+    const custom: TilesetConfig = {
       ...defaults.main,
       ...info,
       offset: { ...defaults.offset, ...(info.offset || {}) }

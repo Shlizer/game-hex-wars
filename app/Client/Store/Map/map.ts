@@ -1,7 +1,7 @@
 /* eslint class-methods-use-this: off */
 
-import { TypeInfo, TypeLayout } from '../../../Definitions/map';
-import { Tileset as TSConfig } from '../../../Definitions/tileset';
+import { MapInfo, MapLayout } from '../../../Definitions/map';
+import { TilesetConfig } from '../../../Definitions/tileset';
 import TSManager from '../Tileset/manager';
 import Loader from '../Loader';
 import Fetcher from '../fetch';
@@ -10,13 +10,13 @@ import Layer from './layer';
 export default class MapObject {
   selected = false;
   loaded = false;
-  info: TypeInfo;
-  layout?: TypeLayout;
+  info: MapInfo;
+  layout?: MapLayout;
 
   canvas: HTMLCanvasElement;
   layers: Layer[] = [];
 
-  constructor(info: TypeInfo) {
+  constructor(info: MapInfo) {
     this.canvas = document.createElement('canvas');
     this.info = info;
   }
@@ -55,7 +55,7 @@ export default class MapObject {
   async loadMapLayout(): Promise<boolean> {
     const before = () => Loader.add('map-load-layout', 'Schemat mapy');
     const final = () => Loader.remove('map-load-layout');
-    const callback = (layout: TypeLayout, resolve: (v: boolean) => void) => {
+    const callback = (layout: MapLayout, resolve: (v: boolean) => void) => {
       this.layout = layout;
       resolve(!!layout);
     };
@@ -72,7 +72,10 @@ export default class MapObject {
   async loadTilesets(): Promise<boolean> {
     const before = () => Loader.add('map-load-tsets', 'Dane graficzne kafli');
     const final = () => Loader.remove('map-load-tsets');
-    const callback = (tilesets: TSConfig[], resolve: (v: boolean) => void) => {
+    const callback = (
+      tilesets: TilesetConfig[],
+      resolve: (v: boolean) => void
+    ) => {
       TSManager.load(tilesets)
         .then(() => resolve(!!tilesets))
         .catch((err: Error) =>

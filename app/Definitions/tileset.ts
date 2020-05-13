@@ -1,41 +1,17 @@
-export type Tile = {
-  id?: string; // |-> added in code
-  canvas?: HTMLCanvasElement; // |-> added in code
+import { Size, Offset } from './helper';
+import { TileConfig } from './tile';
 
-  file: string;
-  name?: string;
-  description?: string;
-  hex?: {
-    width?: number;
-    height?: number;
-  };
-  offset?: {
-    top?: number;
-    left?: number;
-    right?: number;
-    bottom?: number;
-  };
-};
-
-export type Tileset = {
+export type TilesetConfig = {
   id?: string; // |-> added in code
   path?: string; // |-> added in code
-  image?: HTMLImageElement; // |-> added in code
+  image?: HTMLImageElement; // |-> added in code, for groupped
 
   name?: string;
   description?: string;
   author?: string;
   grouped?: boolean;
-  hex: {
-    width: number;
-    height: number;
-  };
-  offset?: {
-    top?: number;
-    left?: number;
-    right?: number;
-    bottom?: number;
-  };
+  hex: Size;
+  offset?: Offset;
 
   // for grouped
   file?: string;
@@ -43,6 +19,6 @@ export type Tileset = {
   // for not grouped
   extension?: string;
   tiles?: {
-    [key: string]: Tile;
+    [key: string]: TileConfig;
   };
 };

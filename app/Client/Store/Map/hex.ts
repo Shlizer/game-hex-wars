@@ -3,7 +3,7 @@
 /* eslint class-methods-use-this: off */
 
 import TSManager from '../Tileset/manager';
-import { Tile as TConfig } from '../../../Definitions/tileset';
+import { TileConfig } from '../../../Definitions/tile';
 
 export default class HexObject {
   canvas: HTMLCanvasElement;
@@ -15,7 +15,7 @@ export default class HexObject {
   tileset: string;
   value: number | string;
 
-  tile: TConfig;
+  tile: TileConfig;
 
   constructor(args: {
     tileset: string;

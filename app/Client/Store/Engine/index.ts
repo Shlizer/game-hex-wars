@@ -1,6 +1,6 @@
 /* eslint-disable react/static-property-placement */
 import Store from '..';
-import Cycle from './cycle';
+import LoopControl from './loopControl';
 
 export default class Engine {
   canvas: HTMLCanvasElement;
@@ -23,8 +23,8 @@ export default class Engine {
   };
 
   update(time: number) {
-    if (!Cycle.firstDraw) Cycle.shouldRedraw = false;
-    else Cycle.firstDraw = false;
+    if (!LoopControl.firstDraw) LoopControl.shouldRedraw = false;
+    else LoopControl.firstDraw = false;
 
     if (this.store.current.map) {
       this.store.current.map.update(time);

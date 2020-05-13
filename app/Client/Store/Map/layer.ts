@@ -1,10 +1,10 @@
 /* eslint-disable react/static-property-placement */
-import { LayerData, LayerType } from '../../../Definitions/map';
-import Cycle from '../Engine/cycle';
+import { LayerConfig, LayerType } from '../../../Definitions/layer';
+import LoopControl from '../Engine/loopControl';
 import HexObject from './hex';
 
 export default class LayerObject {
-  data: LayerData;
+  data: LayerConfig;
   canvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
   image?: HTMLImageElement;
@@ -12,7 +12,7 @@ export default class LayerObject {
   width?: number;
   height?: number;
 
-  constructor(data: LayerData) {
+  constructor(data: LayerConfig) {
     this.data = data;
     this.canvas = document.createElement('canvas');
     const context = this.canvas.getContext('2d');
@@ -38,10 +38,10 @@ export default class LayerObject {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  update() {}
+  update(_time: number) {}
 
   render(mainContext: CanvasRenderingContext2D) {
-    if (Cycle.shouldRedraw) {
+    if (LoopControl.shouldRedraw) {
       if (this.data.type === LayerType.BMP && this.image) {
         this.renderBMP(mainContext);
       } else if (this.data.type === LayerType.TILE) {
@@ -67,11 +67,11 @@ export default class LayerObject {
   }
 
   renderBMP(mainContext: CanvasRenderingContext2D) {
-    this.data.offset = this.data.offset || [0, 0];
+    // this.data.offset = this.data.offset || [0, 0];
     mainContext.drawImage(
       this.canvas,
-      this.data.offset[0],
-      this.data.offset[1],
+      0,
+      0,
       this.canvas.width,
       this.canvas.height
     );
