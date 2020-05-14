@@ -94,6 +94,9 @@ export default class TilesetObject {
   }
 
   getTile(tileId: string | number): TileConfig | undefined {
-    return this.config.tiles?.[tileId];
+    const tile = this.config.tiles?.[tileId];
+    return tile
+      ? { offset: this.config.offset, hex: this.config.hex, ...tile }
+      : undefined;
   }
 }

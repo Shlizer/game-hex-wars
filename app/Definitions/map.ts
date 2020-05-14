@@ -15,6 +15,7 @@ export type MapInfo = {
 
 export type MapLayout = {
   size: Size;
-  offset: Offset;
+  hex: Size;
+  offset?: Offset;
   layers: LayerConfig[];
 };

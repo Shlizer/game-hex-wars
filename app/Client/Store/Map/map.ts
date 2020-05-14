@@ -1,23 +1,30 @@
+/* eslint-disable no-multi-assign */
 /* eslint class-methods-use-this: off */
 
+import { decorate, observable } from 'mobx';
+import { SizeStrict } from '../../../Definitions/helper';
+import { getMapSize } from './helper';
 import { MapInfo, MapLayout } from '../../../Definitions/map';
+import { LayerType } from '../../../Definitions/layer';
 import { TilesetConfig } from '../../../Definitions/tileset';
+import WithContext from '../_withContext';
+import LoopControler from '../_loopControl';
 import TSManager from '../Tileset/manager';
 import Loader from '../Loader';
 import Fetcher from '../fetch';
 import Layer from './layer';
+import LoopControl from '../Engine/loopControl';
 
-export default class MapObject {
+export default class MapObject extends WithContext implements LoopControler {
   selected = false;
   loaded = false;
   info: MapInfo;
   layout?: MapLayout;
-
-  canvas: HTMLCanvasElement;
+  size: SizeStrict = { width: 0, height: 0 };
   layers: Layer[] = [];
 
   constructor(info: MapInfo) {
-    this.canvas = document.createElement('canvas');
+    super();
     this.info = info;
   }
 
@@ -43,7 +50,6 @@ export default class MapObject {
     if (await this.loadMapLayout()) {
       if (await this.loadTilesets()) {
         if (await this.loadLayers()) {
-          console.log('MAP LOADED');
           this.loaded = true;
           return true;
         }
@@ -57,6 +63,22 @@ export default class MapObject {
     const final = () => Loader.remove('map-load-layout');
     const callback = (layout: MapLayout, resolve: (v: boolean) => void) => {
       this.layout = layout;
+      // @todo: get size from layers
+      this.size = getMapSize(
+        this.layout.size.width,
+        this.layout.size.height,
+        this.layout.hex.width,
+        this.layout.hex.height
+      );
+
+      this.canvas.width =
+        this.size.width +
+        (this.layout.offset?.left || 0) +
+        (this.layout.offset?.right || 0);
+      this.canvas.height =
+        this.size.height +
+        (this.layout.offset?.top || 0) +
+        (this.layout.offset?.bottom || 0);
       resolve(!!layout);
     };
 
@@ -99,12 +121,15 @@ export default class MapObject {
       if (this.layout?.layers) {
         const promises: Promise<boolean>[] = [];
 
-        this.layout.layers.forEach(async layerData => {
+        this.layout.layers.forEach(async (layerData, index) => {
           const layer = new Layer(layerData);
           const layerPromise = layer.load(this.info.path || '');
           promises.push(layerPromise);
           layerPromise
-            .then(() => this.layers.push(layer))
+            .then(() => {
+              this.layers[index] = layer;
+              return true;
+            })
             .catch(err => reject(err));
         });
         Promise.all(promises)
@@ -120,7 +145,25 @@ export default class MapObject {
     this.layers.map(layer => layer.update(time));
   }
 
-  render(mainContext: CanvasRenderingContext2D) {
-    this.layers.map(layer => layer.render(mainContext));
+  render(_mainContext: CanvasRenderingContext2D): CanvasRenderingContext2D {
+    if (!LoopControl.shouldRedraw) return this.context;
+
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.layers.forEach(this.renderLayer);
+
+    return this.context;
   }
+
+  renderLayer = (layer: Layer) => {
+    const layerCtx = layer.render();
+    this.context.drawImage(
+      layerCtx.canvas,
+      layer.data.type !== LayerType.BMP ? this.layout?.offset?.left || 0 : 0,
+      layer.data.type !== LayerType.BMP ? this.layout?.offset?.top || 0 : 0
+    );
+  };
 }
+
+decorate(MapObject, {
+  size: observable
+});

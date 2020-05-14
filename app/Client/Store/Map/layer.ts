@@ -1,26 +1,21 @@
 /* eslint-disable react/static-property-placement */
 import { LayerConfig, LayerType } from '../../../Definitions/layer';
 import LoopControl from '../Engine/loopControl';
+import WithContext from '../_withContext';
+import LoopControler from '../_loopControl';
 import HexObject from './hex';
+import { getMapSize } from './helper';
 
-export default class LayerObject {
+export default class LayerObject extends WithContext implements LoopControler {
   data: LayerConfig;
-  canvas: HTMLCanvasElement;
-  context: CanvasRenderingContext2D;
   image?: HTMLImageElement;
   hexes: HexObject[] = [];
   width?: number;
   height?: number;
 
   constructor(data: LayerConfig) {
+    super();
     this.data = data;
-    this.canvas = document.createElement('canvas');
-    const context = this.canvas.getContext('2d');
-
-    if (context) this.context = context;
-    else throw new Error('Cannot create context for layer.');
-
-    this.context.globalAlpha = this.data.alpha || 1;
   }
 
   async load(mapPath: string): Promise<boolean> {
@@ -40,14 +35,17 @@ export default class LayerObject {
   // eslint-disable-next-line class-methods-use-this
   update(_time: number) {}
 
-  render(mainContext: CanvasRenderingContext2D) {
-    if (LoopControl.shouldRedraw) {
-      if (this.data.type === LayerType.BMP && this.image) {
-        this.renderBMP(mainContext);
-      } else if (this.data.type === LayerType.TILE) {
-        this.renderTILE(mainContext);
-      }
+  render(): CanvasRenderingContext2D {
+    if (!LoopControl.shouldRedraw) return this.context;
+    this.setAlpha(this.data.alpha);
+
+    if (this.data.type === LayerType.BMP && this.image) {
+      return this.renderBMP();
     }
+    if (this.data.type === LayerType.TILE) {
+      return this.renderTILE();
+    }
+    return this.context;
   }
 
   async loadBMP(mapPath: string): Promise<boolean> {
@@ -66,54 +64,52 @@ export default class LayerObject {
     });
   }
 
-  renderBMP(mainContext: CanvasRenderingContext2D) {
-    // this.data.offset = this.data.offset || [0, 0];
-    mainContext.drawImage(
-      this.canvas,
-      0,
-      0,
-      this.canvas.width,
-      this.canvas.height
-    );
+  renderBMP(): CanvasRenderingContext2D {
+    return this.context;
   }
 
   async loadTILE(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       const { tiles } = this.data;
-      this.height = tiles.length;
+      this.getLayerSize(tiles);
 
       for (let y = 0; y < tiles.length; y++) {
-        this.width = Math.max(this.width || 0, tiles[y].length);
-
         for (let x = 0; x < tiles[y].length; x++) {
-          this.hexes[y * tiles[y].length + x] = new HexObject({
-            value: tiles[y][x],
-            x,
-            y,
-            tileset: this.data.tileset
-          });
+          if (tiles[y][x])
+            this.hexes[y * (this.width || 0) + x] = new HexObject({
+              value: tiles[y][x],
+              x,
+              y,
+              tileset: this.data.tileset
+            });
         }
       }
+      // @todo: get size from hexes
+      const size = getMapSize(this.width, this.height, 128, 110);
+      this.canvas.width = size.width;
+      this.canvas.height = size.height;
       resolve(true);
     });
   }
 
-  renderTILE(mainContext: CanvasRenderingContext2D) {
+  getLayerSize(tiles: (string | number)[][]) {
+    this.height = tiles.length;
+
+    for (let y = 0; y < tiles.length; y++) {
+      this.width = Math.max(this.width || 0, tiles[y].length);
+    }
+  }
+
+  renderTILE(): CanvasRenderingContext2D {
     this.hexes.forEach(hex => {
       this.context.drawImage(
         hex.getGfx(),
-        hex.x * hex.width,
-        hex.y * hex.height,
-        hex.width,
-        hex.height
+        hex.getPositionX(),
+        hex.getPositionY(),
+        hex.getWidth(),
+        hex.getHeight()
       );
     });
-    mainContext.drawImage(
-      this.canvas,
-      0,
-      0,
-      this.canvas.width,
-      this.canvas.height
-    );
+    return this.context;
   }
 }

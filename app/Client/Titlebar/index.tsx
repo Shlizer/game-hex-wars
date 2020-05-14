@@ -4,7 +4,7 @@ import styles from './style.scss';
 
 export default function Titlebar() {
   return (
-    <div className={styles.titleBar}>
+    <div id="titleBar" className={styles.titleBar}>
       <span className={styles.title}>Hex Wars</span>
       <span className={styles.buttons}>
         <Close />
