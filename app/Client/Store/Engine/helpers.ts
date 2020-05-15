@@ -28,7 +28,8 @@ export function cubeToOddQ(cube: Cube) {
   const col = cube.x;
   // eslint-disable-next-line no-bitwise
   const row = cube.z + (cube.x - (cube.x & 1)) / 2;
-  return { x: col, y: row };
+  // eslint-disable-next-line no-compare-neg-zero
+  return { x: col === -0 ? 0 : col, y: row === -0 ? 0 : row };
 }
 
 export function pixelToHex(positionAndSize: Rect): Point {
