@@ -2,7 +2,7 @@ import React from 'react';
 import { decorate, observable, computed } from 'mobx';
 import { observer } from 'mobx-react';
 import Engine from '../Store/Engine';
-import { mouse, hex } from '../Store/Engine/SpecialLayer/selection';
+import { mouse, hex } from '../Store/Engine/state';
 import styles from './style.scss';
 
 type Props = {

@@ -1,7 +1,7 @@
 /* eslint-disable react/static-property-placement */
 import { SizeStrict, Rect } from '../../../Definitions/helper';
 import Store from '..';
-import LoopControl from './loopControl';
+import { loop } from './state';
 import Grid from './SpecialLayer/grid';
 import Selection from './SpecialLayer/selection';
 import MapObject from '../Map/map';
@@ -70,8 +70,8 @@ export default class Engine {
   };
 
   update(time: number) {
-    if (!LoopControl.firstDraw) LoopControl.shouldRedraw = false;
-    else LoopControl.firstDraw = false;
+    if (!loop.firstDraw) loop.shouldRedraw = false;
+    else loop.firstDraw = false;
 
     if (this.store.current.map) {
       if (this.canvasSize !== this.store.current.map.sizeOffset) {
@@ -93,7 +93,7 @@ export default class Engine {
   }
 
   renderMap(map: MapObject) {
-    if (LoopControl.shouldRedraw) {
+    if (loop.shouldRedraw) {
       clearContext(this.context.map);
       const { x, y, w, h } = this.getMapRect(map, true);
       const mapCanvas = map.render(this.context.map).canvas;

@@ -9,11 +9,11 @@ import { LayerType } from '../../../Definitions/layer';
 import { TilesetConfig } from '../../../Definitions/tileset';
 import WithContext from '../_withContext';
 import LoopControler from '../_loopControl';
+import { loop } from '../Engine/state';
 import TSManager from '../Tileset/manager';
 import Loader from '../Loader';
 import Fetcher from '../fetch';
 import Layer from './layer';
-import LoopControl from '../Engine/loopControl';
 
 export default class MapObject extends WithContext implements LoopControler {
   selected = false;
@@ -147,7 +147,7 @@ export default class MapObject extends WithContext implements LoopControler {
   }
 
   render(_mainContext: CanvasRenderingContext2D): CanvasRenderingContext2D {
-    if (!LoopControl.shouldRedraw) return this.context;
+    if (!loop.shouldRedraw) return this.context;
 
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.layers.forEach(this.renderLayer);

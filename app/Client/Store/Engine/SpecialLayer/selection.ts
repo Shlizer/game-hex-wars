@@ -1,13 +1,10 @@
-import { autorun, observable } from 'mobx';
+import { autorun } from 'mobx';
 import WithContext from '../../_withContext';
 import LoopControler from '../../_loopControl';
 import { clearContext, pixelToHex, hexDrawPoints } from '../helpers';
-import { Rect, SizeStrict, Point } from '../../../../Definitions/helper';
+import { mouse, hex, selected } from '../state';
+import { Rect, SizeStrict } from '../../../../Definitions/helper';
 import Store from '../..';
-
-export const mouse = observable({ x: 0, y: 0 });
-export const hex = observable({ x: 0, y: 0 });
-export const selected: Point = observable({ x: -1, y: -1 });
 
 export default class Selection extends WithContext implements LoopControler {
   store: Store;
