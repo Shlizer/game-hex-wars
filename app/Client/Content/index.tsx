@@ -9,6 +9,8 @@ import { StoreContext } from '../Store';
 import MapChoose from './MapChoose';
 import Canvas from './Canvas';
 import Loading from './Loading';
+import Cursor from './Cursor';
+import CursorTest from './Cursor/test';
 import styles from './style.scss';
 import './style.global.scss';
 
@@ -22,6 +24,8 @@ class Content extends React.Component {
           store={ToastsStore}
           position={ToastsContainerPosition.TOP_RIGHT}
         />
+        <Cursor />
+        <CursorTest />
       </div>
     );
   }

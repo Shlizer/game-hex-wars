@@ -1,0 +1,9 @@
+.cursor {
+  position: absolute;
+  pointer-events: none;
+
+  img {
+    width: 32px;
+    height: 32px;
+  }
+}

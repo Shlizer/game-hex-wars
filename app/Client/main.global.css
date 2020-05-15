@@ -17,7 +17,6 @@ body {
   bottom: 0;
   box-sizing: border-box;
   -webkit-app-region: no-drag;
-  cursor: default;
 }
 
 #root {

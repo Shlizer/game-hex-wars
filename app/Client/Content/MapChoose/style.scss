@@ -12,7 +12,6 @@
     filter: grayscale(0.4);
     box-shadow: 0.1em 0.1em 0.1em rgba(0, 0, 0, 0.4);
     transition: all 0.1s ease-in;
-    cursor: pointer;
 
     &:hover {
       transform: scale(1.1);
