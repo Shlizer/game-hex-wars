@@ -17,6 +17,17 @@ import './style.global.scss';
 const customPointer = false;
 
 class Content extends React.Component {
+  get cursor() {
+    return (
+      <>
+        {customPointer ? <Cursor /> : null}
+        {!customPointer && this.context && this.context.current.map ? null : (
+          <CursorTest />
+        )}
+      </>
+    );
+  }
+
   render() {
     return (
       <div
@@ -31,8 +42,7 @@ class Content extends React.Component {
           store={ToastsStore}
           position={ToastsContainerPosition.TOP_RIGHT}
         />
-        {customPointer ? <Cursor /> : null}
-        {this.context && this.context.current.map ? null : <CursorTest />}
+        {this.cursor}
       </div>
     );
   }

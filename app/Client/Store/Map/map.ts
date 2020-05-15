@@ -9,7 +9,7 @@ import { LayerType } from '../../../Definitions/layer';
 import { TilesetConfig } from '../../../Definitions/tileset';
 import WithContext from '../_withContext';
 import LoopControler from '../_loopControl';
-import { loop } from '../Engine/state';
+import State from '../Engine/state';
 import TSManager from '../Tileset/manager';
 import Loader from '../Loader';
 import Fetcher from '../fetch';
@@ -19,6 +19,7 @@ export default class MapObject extends WithContext implements LoopControler {
   selected = false;
   loaded = false;
   info: MapInfo;
+  path: number[][] = [];
   layout?: MapLayout;
   size: SizeStrict = { width: 0, height: 0 };
   sizeOffset: SizeStrict = { width: 0, height: 0 };
@@ -51,6 +52,7 @@ export default class MapObject extends WithContext implements LoopControler {
     if (await this.loadMapLayout()) {
       if (await this.loadTilesets()) {
         if (await this.loadLayers()) {
+          this.loadPaths();
           this.loaded = true;
           return true;
         }
@@ -142,12 +144,25 @@ export default class MapObject extends WithContext implements LoopControler {
     }).finally(() => Loader.remove('map-load-layouts'));
   }
 
+  loadPaths() {
+    this.path = [];
+    for (let x = 0; x < (this.layout?.size?.height || 0); x++) {
+      this.path[x] = [];
+      for (let y = 0; y < (this.layout?.size?.width || 0); y++) {
+        this.path[x][y] =
+          this.layout?.path?.[x]?.[y] === undefined
+            ? 1
+            : this.layout?.path?.[x]?.[y];
+      }
+    }
+  }
+
   update(time: number) {
     this.layers.map(layer => layer.update(time));
   }
 
   render(_mainContext: CanvasRenderingContext2D): CanvasRenderingContext2D {
-    if (!loop.shouldRedraw) return this.context;
+    if (!State.loop.shouldRedraw) return this.context;
 
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.layers.forEach(this.renderLayer);

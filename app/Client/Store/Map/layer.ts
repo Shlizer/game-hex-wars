@@ -1,6 +1,6 @@
 /* eslint-disable react/static-property-placement */
 import { LayerConfig, LayerType } from '../../../Definitions/layer';
-import { loop } from '../Engine/state';
+import State from '../Engine/state';
 import WithContext from '../_withContext';
 import LoopControler from '../_loopControl';
 import HexObject from './hex';
@@ -36,7 +36,7 @@ export default class LayerObject extends WithContext implements LoopControler {
   update(_time: number) {}
 
   render(): CanvasRenderingContext2D {
-    if (!loop.shouldRedraw) return this.context;
+    if (!State.loop.shouldRedraw) return this.context;
     this.setAlpha(this.data.alpha);
 
     if (this.data.type === LayerType.BMP && this.image) {

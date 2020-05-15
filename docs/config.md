@@ -34,19 +34,20 @@ Map configuration is stored in two separate files: **info.json** has some basic 
 
 **layout.json**
 
-| Value     | Type                    | Default | Description                                                                                            |
-| --------- | ----------------------- | ------- | ------------------------------------------------------------------------------------------------------ |
-| _minimap_ | ?string                 |         | path to minimap graphic if exists                                                                      |
-| layers    | object[]                |         | this object stores map layers and comes with few layer types                                           |
-| alpha     | number(0.0-1.0)         | 1.0     | sets alpha channel for layout                                                                          |
-| offset    | ?[number, number]       | [0,0]   | offset of bitmap to draw                                                                               |
-| - type    | enum[BMP, TILE, *PATH*] | TILE    | informs what layer type it is                                                                          |
-| ---       | ---                     | ---     | OPTIONS ONLY FOR **type: 'BMP'** (bitmap layer)                                                        |
-| size      | [number, number]        |         | size of the bitmap to draw                                                                             |
-| file      | string                  |         | path to bitmap file                                                                                    |
-| ---       | ---                     | ---     | OPTIONS ONLY FOR **type: 'TILE'** (tile layer)                                                         |
-| tileset   | string                  |         | dir name of the tileset layer is using                                                                 |
-| tiles     | number\[]\[]            |         | two dimensional array of tile names (its id's); by default it's their position in tileset or file name |
+| Value     | Type              | Default | Description                                                                                            |
+| --------- | ----------------- | ------- | ------------------------------------------------------------------------------------------------------ |
+| _minimap_ | ?string           |         | path to minimap graphic if exists                                                                      |
+| layers    | object[]          |         | this object stores map layers and comes with few layer types                                           |
+| alpha     | number(0.0-1.0)   | 1.0     | sets alpha channel for layout                                                                          |
+| offset    | ?[number, number] | [0,0]   | offset of bitmap to draw                                                                               |
+| path      | ?number\[][]      |         | costs for each tile to travel, where 1 means 'normal' and 0 'unreachable'                              |
+| - type    | enum[BMP, TILE]   | TILE    | informs what layer type it is                                                                          |
+| ---       | ---               | ---     | OPTIONS ONLY FOR **type: 'BMP'** (bitmap layer)                                                        |
+| size      | [number, number]  |         | size of the bitmap to draw                                                                             |
+| file      | string            |         | path to bitmap file                                                                                    |
+| ---       | ---               | ---     | OPTIONS ONLY FOR **type: 'TILE'** (tile layer)                                                         |
+| tileset   | string            |         | dir name of the tileset layer is using                                                                 |
+| tiles     | number\[]\[]      |         | two dimensional array of tile names (its id's); by default it's their position in tileset or file name |
 
 ## Tileset config
 

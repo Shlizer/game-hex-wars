@@ -1,3 +1,7 @@
 .toasts-container {
   top: calc(10px + var(--app-titlebar-size)) !important;
 }
+
+.no-cursor {
+  cursor: none !important;
+}

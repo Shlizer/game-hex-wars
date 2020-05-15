@@ -1,8 +1,9 @@
+/* eslint-disable class-methods-use-this */
 import React from 'react';
 import { decorate, observable, computed } from 'mobx';
 import { observer } from 'mobx-react';
 import Engine from '../Store/Engine';
-import { mouse, hex } from '../Store/Engine/state';
+import State from '../Store/Engine/state';
 import styles from './style.scss';
 
 type Props = {
@@ -28,24 +29,29 @@ class Debug extends React.Component<Props> {
     this.mounted = false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   get showFPS() {
-    const txt = `FPS ${this.time.fps}`;
-    return <div>{txt}</div>;
+    if (this.time.fps <= 10) {
+      return <span className={styles.poor}>{this.time.fps}</span>;
+    }
+    if (this.time.fps <= 35) {
+      return <span className={styles.medium}>{this.time.fps}</span>;
+    }
+    return <span className={styles.good}>{this.time.fps}</span>;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   get showMouse() {
-    const { x, y } = mouse;
-    const txt = `MOUSE ${x >= 0 && y >= 0 ? `${x}x${y}` : '-'}`;
-    return <div>{txt}</div>;
+    const { x, y } = State.mouse;
+    return x >= 0 && y >= 0 ? `${x}x${y}` : '-';
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  get showScroll() {
+    const { x, y } = State.scroll;
+    return x >= 0 && y >= 0 ? `${x}x${y}` : '-';
+  }
+
   get showHex() {
-    const { x, y } = hex;
-    const txt = `HEX ${x >= 0 && y >= 0 ? `${x}x${y}` : '-'}`;
-    return <div>{txt}</div>;
+    const { x, y } = State.hex;
+    return x >= 0 && y >= 0 ? `${x}x${y}` : '-';
   }
 
   checkFps = () => {
@@ -64,9 +70,16 @@ class Debug extends React.Component<Props> {
   render() {
     return (
       <div className={styles.debug}>
-        {this.showFPS}
-        {this.showMouse}
-        {this.showHex}
+        <dl>
+          <dt>FPS</dt>
+          <dd>{this.showFPS}</dd>
+          <dt>Mouse pos.</dt>
+          <dd>{this.showMouse}</dd>
+          <dt>Map scroll</dt>
+          <dd>{this.showScroll}</dd>
+          <dt>Hex hover</dt>
+          <dd>{this.showHex}</dd>
+        </dl>
       </div>
     );
   }

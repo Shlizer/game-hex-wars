@@ -2,7 +2,7 @@ import { autorun } from 'mobx';
 import WithContext from '../../_withContext';
 import LoopControler from '../../_loopControl';
 import { clearContext, pixelToHex, hexDrawPoints } from '../helpers';
-import { mouse, hex, selected } from '../state';
+import State from '../state';
 import { Rect, SizeStrict } from '../../../../Definitions/helper';
 import Store from '../..';
 
@@ -21,27 +21,21 @@ export default class Selection extends WithContext implements LoopControler {
       }
     });
 
-    document.addEventListener('mousemove', this.getMouse);
     document.addEventListener('mousedown', this.mouseClick);
   }
 
-  getMouse = (e: MouseEvent) => {
-    const header = document.getElementById('titleBar')?.clientHeight || 0;
-    const { map } = this.store.current;
-    mouse.x = e.x - (map?.layout?.offset?.left || 0);
-    mouse.y = e.y - (map?.layout?.offset?.top || 0) - header;
-  };
-
   mouseClick = (e: MouseEvent) => {
-    if (e.button === 0) {
-      if (hex.x >= 0 && hex.y >= 0) {
-        selected.x = hex.x;
-        selected.y = hex.y;
-      } else {
-        selected.x = -1;
-        selected.x = -1;
+    setTimeout(() => {
+      if (e.button === 0 && !State.isScrolling) {
+        if (State.hex.x >= 0 && State.hex.y >= 0) {
+          State.selected.x = State.hex.x;
+          State.selected.y = State.hex.y;
+        } else {
+          State.selected.x = -1;
+          State.selected.x = -1;
+        }
       }
-    }
+    }, 50);
   };
 
   // @computed?
@@ -63,14 +57,19 @@ export default class Selection extends WithContext implements LoopControler {
   draw() {
     const h = this.getHexSize();
 
-    if (selected.x >= 0 && selected.y >= 0) {
-      this.drawSelection({ ...selected, w: h.width, h: h.height });
+    if (State.selected.x >= 0 && State.selected.y >= 0) {
+      this.drawSelection({ ...State.selected, w: h.width, h: h.height });
     }
 
-    if (mouse.x > 0 && mouse.y > 0) {
+    if (State.mouse.x > 0 && State.mouse.y > 0) {
       const m = this.getMapSize();
-      if (hex.x >= 0 && hex.y >= 0 && hex.x < m.width && hex.y < m.height) {
-        this.drawCursor({ ...hex, w: h.width, h: h.height });
+      if (
+        State.hex.x >= 0 &&
+        State.hex.y >= 0 &&
+        State.hex.x < m.width &&
+        State.hex.y < m.height
+      ) {
+        this.drawCursor({ ...State.hex, w: h.width, h: h.height });
       }
     }
   }
@@ -103,12 +102,15 @@ export default class Selection extends WithContext implements LoopControler {
     const h = this.getHexSize();
     const m = this.getMapSize();
     const { x, y } = pixelToHex({
-      ...mouse,
+      ...{
+        x: State.mouse.x + State.scroll.x,
+        y: State.mouse.y + State.scroll.y
+      },
       ...{ w: h.width, h: h.height }
     });
-    if (hex.x !== x || hex.y !== y) {
-      hex.x = x >= 0 && x < m.width ? x : -1;
-      hex.y = y >= 0 && y < m.height ? y : -1;
+    if (State.hex.x !== x || State.hex.y !== y) {
+      State.hex.x = x >= 0 && x < m.width ? x : -1;
+      State.hex.y = y >= 0 && y < m.height ? y : -1;
     }
   }
 

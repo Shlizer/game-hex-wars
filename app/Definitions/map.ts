@@ -18,4 +18,5 @@ export type MapLayout = {
   hex: Size;
   offset?: Offset;
   layers: LayerConfig[];
+  path?: number[][];
 };

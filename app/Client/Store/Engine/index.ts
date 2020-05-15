@@ -1,11 +1,12 @@
 /* eslint-disable react/static-property-placement */
 import { SizeStrict, Rect } from '../../../Definitions/helper';
 import Store from '..';
-import { loop } from './state';
+import State from './state';
 import Grid from './SpecialLayer/grid';
 import Selection from './SpecialLayer/selection';
 import MapObject from '../Map/map';
 import { clearContext } from './helpers';
+import Input from './input';
 
 const gridBorder = 2;
 
@@ -18,12 +19,14 @@ export default class Engine {
   canvasSize: SizeStrict = { width: 0, height: 0 };
 
   store: Store;
+  input: Input;
   grid: Grid;
   selection: Selection;
 
   constructor(store: Store, canvases: CanvasObj = {}) {
     this.createCanvases(canvases);
     this.store = store;
+    this.input = new Input(store, this.canvas.main);
     this.grid = new Grid(store, gridBorder);
     this.selection = new Selection(store);
     window.requestAnimationFrame(this.run);
@@ -70,8 +73,8 @@ export default class Engine {
   };
 
   update(time: number) {
-    if (!loop.firstDraw) loop.shouldRedraw = false;
-    else loop.firstDraw = false;
+    if (!State.loop.firstDraw) State.loop.shouldRedraw = false;
+    else State.loop.firstDraw = false;
 
     if (this.store.current.map) {
       if (this.canvasSize !== this.store.current.map.sizeOffset) {
@@ -92,8 +95,12 @@ export default class Engine {
     }
   }
 
+  renderOnMain(canvas: HTMLCanvasElement) {
+    this.context.main.drawImage(canvas, -State.scroll.x, -State.scroll.y);
+  }
+
   renderMap(map: MapObject) {
-    if (loop.shouldRedraw) {
+    if (State.loop.shouldRedraw) {
       clearContext(this.context.map);
       const { x, y, w, h } = this.getMapRect(map, true);
       const mapCanvas = map.render(this.context.map).canvas;
@@ -102,7 +109,7 @@ export default class Engine {
       this.context.map.drawImage(gridCanvas, x, y, w, h);
     }
 
-    this.context.main.drawImage(this.canvas.map, 0, 0);
+    this.renderOnMain(this.canvas.map);
   }
 
   renderSelection(map: MapObject) {
@@ -111,13 +118,13 @@ export default class Engine {
     const selCanvas = this.selection.render(this.context.selection).canvas;
     this.context.selection.drawImage(selCanvas, x, y, w, h);
 
-    this.context.main.drawImage(this.canvas.selection, 0, 0);
+    this.renderOnMain(this.canvas.selection);
   }
 
   renderObjects(map: MapObject) {
     clearContext(this.context.objects);
     //
 
-    this.context.main.drawImage(this.canvas.objects, 0, 0);
+    this.renderOnMain(this.canvas.objects);
   }
 }

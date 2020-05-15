@@ -42,7 +42,7 @@ class Canvas extends React.Component {
   render() {
     return (
       <>
-        <canvas className={styles.canvas} ref={this.ref} />
+        <canvas draggable className={styles.canvas} ref={this.ref} />
         {this.debug}
       </>
     );
