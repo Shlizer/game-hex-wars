@@ -21,6 +21,7 @@ export default class MapObject extends WithContext implements LoopControler {
   info: MapInfo;
   layout?: MapLayout;
   size: SizeStrict = { width: 0, height: 0 };
+  sizeOffset: SizeStrict = { width: 0, height: 0 };
   layers: Layer[] = [];
 
   constructor(info: MapInfo) {
@@ -71,11 +72,11 @@ export default class MapObject extends WithContext implements LoopControler {
         this.layout.hex.height
       );
 
-      this.canvas.width =
+      this.canvas.width = this.sizeOffset.width =
         this.size.width +
         (this.layout.offset?.left || 0) +
         (this.layout.offset?.right || 0);
-      this.canvas.height =
+      this.canvas.height = this.sizeOffset.height =
         this.size.height +
         (this.layout.offset?.top || 0) +
         (this.layout.offset?.bottom || 0);

@@ -1,7 +1,9 @@
 import { autorun } from 'mobx';
-import WithContext from '../_withContext';
-import LoopControler from '../_loopControl';
-import Store from '..';
+import WithContext from '../../_withContext';
+import LoopControler from '../../_loopControl';
+import { Rect } from '../../../../Definitions/helper';
+import { hexDrawPoints } from '../helpers';
+import Store from '../..';
 
 export default class Grid extends WithContext implements LoopControler {
   store: Store;
@@ -32,24 +34,15 @@ export default class Grid extends WithContext implements LoopControler {
   draw(hexWidth: number, hexHeight: number, columns: number, rows: number) {
     for (let y = 0; y < columns; y++) {
       for (let x = 0; x < rows; x++) {
-        if (this.gridBorder > 0) this.drawGrid(x, y, hexWidth, hexHeight);
-        if (this.showCoords) this.drawCoords(x, y, hexWidth, hexHeight);
+        const rect = { x, y, w: hexWidth, h: hexHeight };
+        if (this.gridBorder > 0) this.drawGrid(rect);
+        if (this.showCoords) this.drawCoords(rect);
       }
     }
   }
 
-  drawGrid(x: number, y: number, width: number, height: number) {
-    const dx = x * width * 0.75;
-    const dy = y * height + (x % 2 ? height / 2 : 0);
-
-    const points = [
-      [dx + width / 4, dy], // top - left
-      [dx + (width * 3) / 4, dy], // top - right
-      [dx + width, dy + height / 2], // right
-      [dx + (width * 3) / 4, dy + height], // bottom - right
-      [dx + width / 4, dy + height], // bottom - left
-      [dx + 0, dy + height / 2] // left
-    ];
+  drawGrid(rect: Rect) {
+    const points = hexDrawPoints(rect);
     this.context.beginPath();
     this.context.lineWidth = this.gridBorder;
     this.context.moveTo(points[0][0], points[0][1]);
@@ -63,20 +56,22 @@ export default class Grid extends WithContext implements LoopControler {
     this.context.stroke();
   }
 
-  drawCoords(x: number, y: number, width: number, height: number) {
+  drawCoords(rect: Rect) {
+    const { x, y, w, h } = rect;
     this.context.fillStyle = 'white';
     this.context.font = 'normal 1.2em Lato';
     this.context.textAlign = 'center';
     this.context.fillText(
       `${x}, ${y}`,
-      x * width * 0.75 + width / 2,
-      y * height + (x % 2 ? height / 2 : 0) + height / 2
+      x * w * 0.75 + w / 2,
+      y * h + (x % 2 ? h / 2 : 0) + h / 2
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
   update(_time: number) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   render(_mainContext?: CanvasRenderingContext2D): CanvasRenderingContext2D {
     return this.context;
   }

@@ -14,3 +14,21 @@ export type Offset = {
   right?: number;
   bottom?: number;
 };
+
+export type Point = {
+  x: number;
+  y: number;
+};
+
+export type Cube = {
+  x: number;
+  y: number;
+  z: number;
+};
+
+export type Rect = {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+};

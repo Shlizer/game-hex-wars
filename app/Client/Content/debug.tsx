@@ -1,7 +1,9 @@
 import React from 'react';
-import { decorate, observable } from 'mobx';
+import { decorate, observable, computed } from 'mobx';
 import { observer } from 'mobx-react';
 import Engine from '../Store/Engine';
+import { mouse, hex } from '../Store/Engine/SpecialLayer/selection';
+import styles from './style.scss';
 
 type Props = {
   canvas: HTMLCanvasElement;
@@ -26,6 +28,26 @@ class Debug extends React.Component<Props> {
     this.mounted = false;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  get showFPS() {
+    const txt = `FPS ${this.time.fps}`;
+    return <div>{txt}</div>;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  get showMouse() {
+    const { x, y } = mouse;
+    const txt = `MOUSE ${x >= 0 && y >= 0 ? `${x}x${y}` : '-'}`;
+    return <div>{txt}</div>;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  get showHex() {
+    const { x, y } = hex;
+    const txt = `HEX ${x >= 0 && y >= 0 ? `${x}x${y}` : '-'}`;
+    return <div>{txt}</div>;
+  }
+
   checkFps = () => {
     this.time.now = performance.now();
     while (
@@ -41,23 +63,19 @@ class Debug extends React.Component<Props> {
 
   render() {
     return (
-      <div
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          padding: '5px',
-          backgroundColor: 'rgba(0,0,0,0.4)'
-        }}
-      >
-        {this.time.fps}
+      <div className={styles.debug}>
+        {this.showFPS}
+        {this.showMouse}
+        {this.showHex}
       </div>
     );
   }
 }
 
 decorate(Debug, {
-  time: observable
+  time: observable,
+  showMouse: computed,
+  showHex: computed
 });
 
 export default observer(Debug);
