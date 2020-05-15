@@ -9,7 +9,11 @@
   border-left: var(--app-border);
   border-right: var(--app-border);
   border-bottom: var(--app-border);
-  cursor: none;
+
+  &.customPointer,
+  &.customPointer * {
+    cursor: none !important;
+  }
 
   .debug {
     position: absolute;
