@@ -1,5 +1,4 @@
-/* eslint-disable react/static-property-placement */
-import { pixelToHex } from '../helpers';
+import { pixelToHex, setCursor } from '../helpers';
 import State from '../../State';
 import EnginePart from './_part';
 
@@ -22,6 +21,7 @@ export default class Input extends EnginePart {
         x: x >= 0 && x < map.w ? x : -1,
         y: y >= 0 && y < map.h ? y : -1
       };
+      setCursor();
     }
   };
 

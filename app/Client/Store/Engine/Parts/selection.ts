@@ -1,5 +1,5 @@
 import EnginePart from './_part';
-import { hexDrawPoints } from '../helpers';
+import { hexDrawPoints, setCursor } from '../helpers';
 import State from '../../State';
 import { Rect, Size, Point } from '../../../../Definitions/helper';
 
@@ -23,11 +23,18 @@ export default class Selection extends EnginePart {
   mouseClick = (e: MouseEvent) => {
     setTimeout(() => {
       if (e.button === 0 && !State.isScrolling) {
-        if (State.hex.hover.x >= 0 && State.hex.hover.y >= 0) {
-          State.hexSelect = { x: State.hex.hover.x, y: State.hex.hover.y };
+        const { hover, select } = State.hex;
+        if (
+          hover.x >= 0 &&
+          hover.y >= 0 &&
+          hover.x !== select.x &&
+          hover.y !== select.y
+        ) {
+          State.hexSelect = { x: hover.x, y: hover.y };
         } else {
           State.hexSelect = { x: -1, y: -1 };
         }
+        setCursor();
       }
     }, 50);
   };

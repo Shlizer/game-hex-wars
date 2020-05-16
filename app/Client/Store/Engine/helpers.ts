@@ -1,4 +1,6 @@
 import { Rect, Point, Cube } from '../../../Definitions/helper';
+import State from '../State';
+import Cursor from '../Cursor';
 
 export function clearContext(ctx: CanvasRenderingContext2D) {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -55,4 +57,15 @@ export function hexDrawPoints(positionAndSize: Rect): [number, number][] {
     [dx + w / 4, dy + h], // bottom - left
     [dx + 0, dy + h / 2] // left
   ];
+}
+
+export function setCursor() {
+  const { hover, select } = State.hex;
+  const isHover = hover.x >= 0 && hover.y >= 0;
+  const isSelect = select.x >= 0 && select.y >= 0;
+  if (isHover) {
+    if (isSelect && (hover.x !== select.x || hover.y !== select.y))
+      Cursor.setMove();
+    else Cursor.setSelect();
+  } else Cursor.setDefault();
 }
