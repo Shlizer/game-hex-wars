@@ -1,55 +1,45 @@
-import { decorate, observable } from 'mobx';
-import { Point } from '../../../Definitions/helper';
+import { action, observable } from 'mobx';
+import State from '../Engine/state';
 import cursors, { icons } from './blue';
 
 class Cursor {
-  show = false;
-  position: Point = { x: 0, y: 0 };
-  icon: string = cursors.default;
+  static position = observable({ x: 0, y: 0 });
 
-  constructor() {
-    document.addEventListener('mousemove', this.getMouse);
-    window.addEventListener('mouseout', this.mouseOut);
-  }
-
-  getMouse = (e: MouseEvent) => {
-    this.show = true;
+  static getMouse = action((e: MouseEvent) => {
+    State.mouse.visible = true;
     const header = document.getElementById('titleBar')?.clientHeight || 0;
-    this.position.x = e.x;
-    this.position.y = e.y - header;
-  };
+    Cursor.position.x = e.x;
+    Cursor.position.y = e.y - header;
+  });
 
-  mouseOut = () => {
-    this.show = false;
-  };
+  static mouseOut = action(() => {
+    State.mouse.visible = false;
+    console.log('mouse out');
+  });
 
-  setDefault() {
-    this.icon = cursors.default;
+  static setDefault() {
+    State.mouse.mode = cursors.default;
   }
 
-  setPointer() {
-    this.icon = cursors.pointer;
+  static setPointer() {
+    State.mouse.mode = cursors.pointer;
   }
 
-  setSelect() {
-    this.icon = cursors.select;
+  static setSelect() {
+    State.mouse.mode = cursors.select;
   }
 
-  setMove() {
-    this.icon = cursors.move;
+  static setMove() {
+    State.mouse.mode = cursors.move;
   }
 
-  set(num: number) {
-    this.icon = icons[num];
+  static set(num: number) {
+    State.mouse.mode = icons[num];
   }
 }
 
-decorate(Cursor, {
-  show: observable,
-  icon: observable,
-  position: observable
-});
+State.mouse.mode = cursors.default;
+document.addEventListener('mousemove', Cursor.getMouse);
+window.addEventListener('mouseout', Cursor.mouseOut);
 
-const cur = new Cursor();
-
-export default cur;
+export default Cursor;

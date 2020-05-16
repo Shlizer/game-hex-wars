@@ -53,7 +53,7 @@ class DebugControls extends React.Component {
           <input
             type="checkbox"
             onClick={this.changeMouseCustom}
-            checked={State.mouse.custom}
+            checked={State.mouse.show}
           />
         </dt>
         <dd>Show cursor</dd>
@@ -74,7 +74,7 @@ class DebugControls extends React.Component {
   };
 
   changeMouseCustom = () => {
-    State.mouse.custom = !State.mouse.custom;
+    State.mouse.show = !State.mouse.show;
   };
 
   render() {

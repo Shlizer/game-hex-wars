@@ -3,20 +3,25 @@
 import React from 'react';
 import { computed, decorate } from 'mobx';
 import { observer } from 'mobx-react';
+import State from '../../Store/Engine/state';
 import CursorStore from '../../Store/Cursor';
 import styles from './style.scss';
 
 class Cursor extends React.Component {
   get position() {
-    return { top: CursorStore.position.y, left: CursorStore.position.x };
+    return {
+      top: CursorStore.position.y,
+      left: CursorStore.position.x
+    };
   }
 
   get cursor() {
-    return <img src={CursorStore.icon} alt="Cursor" />;
+    console.log('show other cursor');
+    return <img src={State.mouse.mode} alt="Cursor" />;
   }
 
   render() {
-    return CursorStore.show ? (
+    return State.mouse.show && State.mouse.visible ? (
       <div className={styles.cursor} style={{ ...this.position }}>
         {this.cursor}
       </div>

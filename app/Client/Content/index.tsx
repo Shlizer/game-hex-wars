@@ -20,14 +20,13 @@ import './style.global.scss';
 
 class Content extends React.Component {
   get classes() {
-    return [
-      styles.content,
-      State.mouse.custom ? styles.customPointer : ''
-    ].join(' ');
+    return [styles.content, State.mouse.show ? styles.customPointer : ''].join(
+      ' '
+    );
   }
 
   get cursor() {
-    if (!State.mouse.custom) return null;
+    if (!State.mouse.show) return null;
     return (
       <>
         <Cursor />

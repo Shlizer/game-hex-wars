@@ -6,7 +6,7 @@ class State {
   _loop: { firstDraw: boolean; shouldRedraw: boolean }; // Loop controls
   _isScrolling: boolean; // Is currently scrolling
   _scroll: Point; // Scroll offset
-  _mouse: { position: Point; custom: boolean }; // Mouse position (in map) and custom gfx
+  _mouse: { position: Point; show: boolean; visible: boolean; mode: string }; // Mouse position (in map) and custom gfx
   _viewport: Size; // Size of the viewport
   _grid: { show: boolean; border: number; coord: boolean; path: boolean };
 
@@ -34,7 +34,12 @@ class State {
     this._loop = { firstDraw: true, shouldRedraw: true };
     this._isScrolling = false;
     this._scroll = { x: 0, y: 0 };
-    this._mouse = { position: { x: 0, y: 0 }, custom: false };
+    this._mouse = {
+      position: { x: 0, y: 0 },
+      show: true,
+      visible: false,
+      mode: ''
+    };
     this._viewport = { w: 0, h: 0 };
     this._grid = { show: true, border: 2, coord: true, path: true };
 

@@ -3,6 +3,7 @@ import WithContext from '../../_withContext';
 export default class EnginePart extends WithContext {
   shouldUpdate = true;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   checkCurrent(obj1: { [key: string]: any }, key: string, data: unknown) {
     if (obj1?.[key] !== data) {
       obj1[key] = data;
