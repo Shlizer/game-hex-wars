@@ -1,18 +1,13 @@
 export type Size = {
-  width?: number;
-  height?: number;
-};
-
-export type SizeStrict = {
-  width: number;
-  height: number;
+  w: number;
+  h: number;
 };
 
 export type Offset = {
-  top?: number;
-  left?: number;
-  right?: number;
-  bottom?: number;
+  top: number;
+  left: number;
+  right: number;
+  bottom: number;
 };
 
 export type Point = {
@@ -31,4 +26,17 @@ export type Rect = {
   y: number;
   w: number;
   h: number;
+};
+
+// DATA FROM OUTSIDE
+export type SizeOut = {
+  width?: number;
+  height?: number;
+};
+
+export type OffsetOut = {
+  top?: number;
+  left?: number;
+  right?: number;
+  bottom?: number;
 };

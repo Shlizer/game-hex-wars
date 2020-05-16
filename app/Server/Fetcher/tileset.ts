@@ -4,7 +4,8 @@ import fs from 'fs-extra';
 import { ipcMain, IpcMainEvent } from 'electron';
 import Options from '../options';
 import ErrorHandler from '../Error';
-import { TilesetConfig } from '../../Definitions/tileset';
+import { TilesetConfig, TilesetConfigOut } from '../../Definitions/tileset';
+import { getSize, getOffset } from './helper';
 
 export default class TSFetch {
   static init() {
@@ -49,32 +50,32 @@ export default class TSFetch {
     return [];
   }
 
-  static getConfig(info: TilesetConfig): TilesetConfig {
-    const defaultSize = { w: 0, h: 0 };
-    const defaultOffset = { top: 0, left: 0, right: 0, bottom: 0 };
-
-    info = { ...{ name: '', description: '', author: '' }, ...info };
-    info.hex = { ...defaultSize, ...(info.hex || {}) };
-    info.offset = { ...defaultOffset, ...(info.offset || {}) };
+  static getConfig(info: TilesetConfigOut): TilesetConfig {
+    const newInfo: TilesetConfig = {
+      grouped: info.grouped,
+      name: info.name || '',
+      file: info.file || '',
+      description: info.description || '',
+      author: info.author || '',
+      extension: info.extension || 'png',
+      hex: getSize(info.hex),
+      offset: getOffset(info.offset),
+      tiles: {}
+    };
 
     if (info.tiles) {
-      Object.keys(info.tiles).forEach(tileId => {
-        info.tiles[tileId] = {
-          ...{ name: '', description: '' },
-          ...info.tiles[tileId]
-        };
-        info.tiles[tileId].hex = {
-          ...defaultSize,
-          ...(info.tiles[tileId].hex || {})
-        };
-        info.tiles[tileId].offset = {
-          ...defaultOffset,
-          ...(info.tiles[tileId].offset || {})
-        };
+      Object.keys(info.tiles).forEach((tileId: string | number) => {
+        if (info.tiles && info.tiles[tileId]) {
+          newInfo.tiles[tileId] = {
+            name: info.tiles[tileId].name || '',
+            file: info.tiles[tileId].file || '',
+            description: info.tiles[tileId].description || '',
+            hex: getSize(info.tiles[tileId].hex),
+            offset: getOffset(info.tiles[tileId].offset)
+          };
+        }
       });
-    } else {
-      info.tiles = {};
     }
-    return info;
+    return newInfo;
   }
 }

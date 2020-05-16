@@ -2,11 +2,6 @@ import { decorate, observable } from 'mobx';
 import { Point } from '../../../Definitions/helper';
 import cursors, { icons } from './blue';
 
-export enum TYPE {
-  default = 'normal',
-  pointer = 'pointer'
-}
-
 class Cursor {
   show = false;
   position: Point = { x: 0, y: 0 };

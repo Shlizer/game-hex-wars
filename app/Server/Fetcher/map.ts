@@ -4,8 +4,8 @@ import fs from 'fs-extra';
 import { ipcMain, IpcMainEvent } from 'electron';
 import Options from '../options';
 import ErrorHandler from '../Error';
-import { MapInfo, MapLayout } from '../../Definitions/map';
-import { LayerType } from '../../Definitions/layer';
+import { MapInfo, MapLayout, MapLayoutOut } from '../../Definitions/map';
+import { getSize, getOffset } from './helper';
 
 export default class MapFetch {
   static init() {
@@ -80,26 +80,27 @@ export default class MapFetch {
     return { ...{ name: '', description: '', author: '', tags: [] }, ...info };
   }
 
-  static getLayoutData(layout: MapLayout): MapLayout {
-    const defaultOffset = { top: 0, left: 0, right: 0, bottom: 0 };
+  static getLayoutData(layout: MapLayoutOut): MapLayout {
+    const newLayout: MapLayout = {
+      size: getSize(layout.size),
+      hex: getSize(layout.hex),
+      offset: getOffset(layout.offset),
+      layers: [],
+      path: layout.path || []
+    };
 
-    layout.size = { ...{ w: 0, h: 0 }, ...(layout.size || {}) };
-    layout.hex = { ...{ w: 0, h: 0 }, ...(layout.hex || {}) };
-    layout.offset = { ...defaultOffset, ...(layout.offset || {}) };
     if (layout.layers) {
-      layout.layers = layout.layers.map(layer => {
-        layer.alpha = layer.alpha !== undefined ? layer.alpha : 1;
-        if (layer.type === LayerType.BMP) {
-          layer.offset = { ...defaultOffset, ...(layer.offset || {}) };
-        } else if (layer.type === LayerType.TILE) {
-          layer.tiles = layer.tiles || [];
-        }
-        return layer;
+      layout.layers.forEach(layer => {
+        newLayout.layers.push({
+          type: layer.type,
+          tileset: layer.tileset || '',
+          file: layer.file || '',
+          alpha: layer.alpha !== undefined ? layer.alpha : 1,
+          offset: getOffset(layer.offset),
+          tiles: layer.tiles || []
+        });
       });
-    } else {
-      layout.layers = [];
     }
-    layout.path = layout.path || [];
-    return layout;
+    return newLayout;
   }
 }

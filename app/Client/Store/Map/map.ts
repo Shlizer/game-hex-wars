@@ -1,37 +1,65 @@
 /* eslint-disable no-multi-assign */
 /* eslint class-methods-use-this: off */
 
-import { decorate, observable } from 'mobx';
-import { SizeStrict } from '../../../Definitions/helper';
+import { Size } from '../../../Definitions/helper';
 import { getMapSize } from './helper';
 import { MapInfo, MapLayout } from '../../../Definitions/map';
-import { LayerType } from '../../../Definitions/layer';
 import { TilesetConfig } from '../../../Definitions/tileset';
-import WithContext from '../_withContext';
-import LoopControler from '../_loopControl';
 import State from '../Engine/state';
 import TSManager from '../Tileset/manager';
 import Loader from '../Loader';
 import Fetcher from '../fetch';
 import Layer from './layer';
 
-export default class MapObject extends WithContext implements LoopControler {
+export default class MapObject {
   selected = false;
   loaded = false;
+
   info: MapInfo;
   path: number[][] = [];
-  layout?: MapLayout;
-  size: SizeStrict = { width: 0, height: 0 };
-  sizeOffset: SizeStrict = { width: 0, height: 0 };
   layers: Layer[] = [];
+  layout?: MapLayout;
+
+  size: Size = { w: 0, h: 0 };
 
   constructor(info: MapInfo) {
-    super();
     this.info = info;
   }
 
-  select() {
-    this.selected = true;
+  async select(): Promise<boolean> {
+    return this.load()
+      .then(loaded => {
+        if (loaded && this.layout) {
+          State.hex.size = this.layout.hex;
+          State.map.offset = this.layout.offset;
+          State.map.size.hex = this.layout.size;
+          // @todo: get size from layers
+          State.map.size.px = {
+            ...getMapSize(
+              State.map.size.hex.w,
+              State.map.size.hex.h,
+              State.hex.size.w,
+              State.hex.size.h
+            )
+          };
+          State.map.size.full.w =
+            State.map.size.px.w +
+            State.map.offset.left +
+            State.map.offset.right;
+          State.map.size.full.h =
+            State.map.size.px.h +
+            State.map.offset.top +
+            State.map.offset.bottom;
+
+          State.map.selected = this.info.id;
+          this.selected = true;
+          return true;
+        }
+        throw new Error('Cannot load and select map');
+      })
+      .catch(err => {
+        throw err;
+      });
   }
 
   deselect() {
@@ -66,22 +94,6 @@ export default class MapObject extends WithContext implements LoopControler {
     const final = () => Loader.remove('map-load-layout');
     const callback = (layout: MapLayout, resolve: (v: boolean) => void) => {
       this.layout = layout;
-      // @todo: get size from layers
-      this.size = getMapSize(
-        this.layout.size.width,
-        this.layout.size.height,
-        this.layout.hex.width,
-        this.layout.hex.height
-      );
-
-      this.canvas.width = this.sizeOffset.width =
-        this.size.width +
-        (this.layout.offset?.left || 0) +
-        (this.layout.offset?.right || 0);
-      this.canvas.height = this.sizeOffset.height =
-        this.size.height +
-        (this.layout.offset?.top || 0) +
-        (this.layout.offset?.bottom || 0);
       resolve(!!layout);
     };
 
@@ -146,9 +158,9 @@ export default class MapObject extends WithContext implements LoopControler {
 
   loadPaths() {
     this.path = [];
-    for (let x = 0; x < (this.layout?.size?.height || 0); x++) {
+    for (let x = 0; x < (this.layout?.size?.h || 0); x++) {
       this.path[x] = [];
-      for (let y = 0; y < (this.layout?.size?.width || 0); y++) {
+      for (let y = 0; y < (this.layout?.size?.w || 0); y++) {
         this.path[x][y] =
           this.layout?.path?.[x]?.[y] === undefined
             ? 1
@@ -156,30 +168,4 @@ export default class MapObject extends WithContext implements LoopControler {
       }
     }
   }
-
-  update(time: number) {
-    this.layers.map(layer => layer.update(time));
-  }
-
-  render(_mainContext: CanvasRenderingContext2D): CanvasRenderingContext2D {
-    if (!State.loop.shouldRedraw) return this.context;
-
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.layers.forEach(this.renderLayer);
-
-    return this.context;
-  }
-
-  renderLayer = (layer: Layer) => {
-    const layerCtx = layer.render();
-    this.context.drawImage(
-      layerCtx.canvas,
-      layer.data.type !== LayerType.BMP ? this.layout?.offset?.left || 0 : 0,
-      layer.data.type !== LayerType.BMP ? this.layout?.offset?.top || 0 : 0
-    );
-  };
 }
-
-decorate(MapObject, {
-  size: observable
-});

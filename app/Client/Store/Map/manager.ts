@@ -5,6 +5,7 @@ import Map from './map';
 import Loader from '../Loader';
 
 export default class MapManager {
+  static current?: Map;
   list: Map[] = [];
 
   constructor() {
@@ -36,10 +37,22 @@ export default class MapManager {
     this.list.forEach(map => map.deselect());
   }
 
-  select(id: string): Map | undefined {
-    const map = this.list.find(mapObj => mapObj.info.id === id);
-    if (map) map.select();
-    return map;
+  select(id: string) {
+    const current = this.list.find(mapObj => mapObj.info.id === id);
+
+    if (current) {
+      current
+        .select()
+        .then(() => {
+          MapManager.current = current;
+          return true;
+        })
+        .catch((error: Error) => {
+          MapManager.current = undefined;
+          this.deselectAll();
+          throw error;
+        });
+    }
   }
 }
 

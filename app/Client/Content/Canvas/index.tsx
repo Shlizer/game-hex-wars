@@ -13,7 +13,7 @@ class Canvas extends React.Component {
   componentDidMount() {
     window.requestAnimationFrame(this.checkSize);
     if (this.ref.current && this.context instanceof Store) {
-      this.engine = new Engine(this.context, { main: this.ref.current });
+      this.engine = new Engine(this.ref.current);
     }
   }
 

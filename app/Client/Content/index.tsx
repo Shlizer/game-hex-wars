@@ -6,6 +6,7 @@ import {
   ToastsContainerPosition
 } from 'react-toasts';
 import { StoreContext } from '../Store';
+import State from '../Store/Engine/state';
 import MapChoose from './MapChoose';
 import Canvas from './Canvas';
 import Loading from './Loading';
@@ -17,13 +18,12 @@ import './style.global.scss';
 const customPointer = false;
 
 class Content extends React.Component {
+  // eslint-disable-next-line class-methods-use-this
   get cursor() {
     return (
       <>
         {customPointer ? <Cursor /> : null}
-        {!customPointer && this.context && this.context.current.map ? null : (
-          <CursorTest />
-        )}
+        {customPointer && !State.map.selected ? null : <CursorTest />}
       </>
     );
   }
@@ -36,7 +36,7 @@ class Content extends React.Component {
           customPointer ? styles.customPointer : ''
         ].join(' ')}
       >
-        {this.context && this.context.current.map ? <Canvas /> : <MapChoose />}
+        {State.map.selected ? <Canvas /> : <MapChoose />}
         <Loading />
         <ToastsContainer
           store={ToastsStore}

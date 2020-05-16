@@ -44,13 +44,48 @@ class Debug extends React.Component<Props> {
     return x >= 0 && y >= 0 ? `${x}x${y}` : '-';
   }
 
-  get showScroll() {
+  get showMap() {
     const { x, y } = State.scroll;
-    return x >= 0 && y >= 0 ? `${x}x${y}` : '-';
+    return (
+      <>
+        <dt className={styles.section}>Map</dt>
+        <dt>Selection</dt>
+        <dd>{State.map.selected || '-'}</dd>
+        {State.map.selected ? (
+          <>
+            <dt>Scroll</dt>
+            <dd>{x >= 0 && y >= 0 ? `${x}x${y}` : '-'}</dd>
+            <dt>Size (px)</dt>
+            <dd>{`${State.map.size.px.w}x${State.map.size.px.h}`}</dd>
+            <dt>Size (hex)</dt>
+            <dd>{`${State.map.size.hex.w}x${State.map.size.hex.h}`}</dd>
+            <dt>Size (offset)</dt>
+            <dd>{`${State.map.size.full.w}x${State.map.size.full.h}`}</dd>
+          </>
+        ) : null}
+      </>
+    );
   }
 
   get showHex() {
-    const { x, y } = State.hex;
+    const { size, hover, select } = State.hex;
+    return (
+      <>
+        <dt className={styles.section}>Hex</dt>
+        <dt>Size</dt>
+        <dd>{size.w >= 0 && size.h >= 0 ? `${size.w}x${size.h}` : '-'}</dd>
+        <dt>Hover</dt>
+        <dd>{hover.x >= 0 && hover.y >= 0 ? `${hover.x}x${hover.y}` : '-'}</dd>
+        <dt>Select</dt>
+        <dd>
+          {select.x >= 0 && select.y >= 0 ? `${select.x}x${select.y}` : '-'}
+        </dd>
+      </>
+    );
+  }
+
+  get showHexSelect() {
+    const { x, y } = State.hex.select;
     return x >= 0 && y >= 0 ? `${x}x${y}` : '-';
   }
 
@@ -75,10 +110,8 @@ class Debug extends React.Component<Props> {
           <dd>{this.showFPS}</dd>
           <dt>Mouse pos.</dt>
           <dd>{this.showMouse}</dd>
-          <dt>Map scroll</dt>
-          <dd>{this.showScroll}</dd>
-          <dt>Hex hover</dt>
-          <dd>{this.showHex}</dd>
+          {this.showMap}
+          {this.showHex}
         </dl>
       </div>
     );
@@ -87,7 +120,9 @@ class Debug extends React.Component<Props> {
 
 decorate(Debug, {
   time: observable,
+  showFPS: computed,
   showMouse: computed,
+  showMap: computed,
   showHex: computed
 });
 

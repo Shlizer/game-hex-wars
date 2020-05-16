@@ -1,10 +1,9 @@
-import { Size, Offset } from './helper';
-import { TileConfig } from './tile';
+import { Size, Offset, OffsetOut, SizeOut } from './helper';
+import { TileConfig, TileConfigOut } from './tile';
 
 export type TilesetConfig = {
-  id: string; // |-> added in code
-  path: string; // |-> added in code
-  image: HTMLImageElement; // |-> added in code, for groupped
+  id?: string;
+  path?: string;
 
   name: string;
   description: string;
@@ -15,10 +14,30 @@ export type TilesetConfig = {
 
   // for grouped
   file: string;
+  image?: HTMLImageElement;
 
   // for not grouped
   extension: string;
   tiles: {
     [key: string]: TileConfig;
+  };
+};
+
+// DATA FROM OUTSIDE
+export type TilesetConfigOut = {
+  name: string;
+  description?: string;
+  author?: string;
+  grouped: boolean;
+  hex?: SizeOut;
+  offset?: OffsetOut;
+
+  // for grouped
+  file?: string;
+
+  // for not grouped
+  extension?: string;
+  tiles?: {
+    [key: string]: TileConfigOut;
   };
 };

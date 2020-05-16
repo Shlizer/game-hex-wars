@@ -31,8 +31,8 @@ export default class HexObject extends WithContext {
     const tile = TSManager.getTile(this.tileset, this.value);
     if (tile) {
       this.tile = tile;
-      this.width = tile.hex?.width || 0;
-      this.height = tile.hex?.height || 0;
+      this.width = tile.hex?.w || 0;
+      this.height = tile.hex?.h || 0;
     } else throw new Error('Cannot get tile data for hex.');
 
     this.setGfx();

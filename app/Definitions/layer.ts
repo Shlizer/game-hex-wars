@@ -1,4 +1,4 @@
-import { Offset } from './helper';
+import { Offset, OffsetOut } from './helper';
 
 export enum LayerType {
   TILE = 'TILE',
@@ -16,4 +16,14 @@ export type LayerConfig = {
   // TILE
   tileset: string;
   tiles: (number | string)[][];
+};
+
+// DATA FROM OUTSIDE
+export type LayerConfigOut = {
+  type: LayerType;
+  alpha?: number;
+  file?: string;
+  offset?: OffsetOut;
+  tileset?: string;
+  tiles?: (number | string)[][];
 };

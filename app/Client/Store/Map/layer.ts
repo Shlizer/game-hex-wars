@@ -1,12 +1,10 @@
 /* eslint-disable react/static-property-placement */
 import { LayerConfig, LayerType } from '../../../Definitions/layer';
-import State from '../Engine/state';
 import WithContext from '../_withContext';
-import LoopControler from '../_loopControl';
 import HexObject from './hex';
 import { getMapSize } from './helper';
 
-export default class LayerObject extends WithContext implements LoopControler {
+export default class LayerObject extends WithContext {
   data: LayerConfig;
   image?: HTMLImageElement;
   hexes: HexObject[] = [];
@@ -32,11 +30,7 @@ export default class LayerObject extends WithContext implements LoopControler {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  update(_time: number) {}
-
   render(): CanvasRenderingContext2D {
-    if (!State.loop.shouldRedraw) return this.context;
     this.setAlpha(this.data.alpha);
 
     if (this.data.type === LayerType.BMP && this.image) {
@@ -55,6 +49,7 @@ export default class LayerObject extends WithContext implements LoopControler {
         this.image = image;
         this.canvas.width = image.width;
         this.canvas.height = image.height;
+        // @todo: async - we should set the redraw state
         this.context.drawImage(this.image, 0, 0, image.width, image.height);
         resolve(true);
       };
@@ -69,7 +64,7 @@ export default class LayerObject extends WithContext implements LoopControler {
   }
 
   async loadTILE(): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>(resolve => {
       const { tiles } = this.data;
       this.getLayerSize(tiles);
 
@@ -86,8 +81,8 @@ export default class LayerObject extends WithContext implements LoopControler {
       }
       // @todo: get size from hexes
       const size = getMapSize(this.width, this.height, 128, 110);
-      this.canvas.width = size.width;
-      this.canvas.height = size.height;
+      this.canvas.width = size.w;
+      this.canvas.height = size.h;
       resolve(true);
     });
   }
