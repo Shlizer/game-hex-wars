@@ -7,7 +7,7 @@ class State {
   _isScrolling: boolean; // Is currently scrolling
   _scroll: Point; // Scroll offset
   _mouse: Point; // Mouse position (in map)
-  _grid: { show: boolean; border: number; coords: boolean };
+  _grid: { show: boolean; border: number; coord: boolean; path: boolean };
 
   _hex: {
     size: Size;
@@ -34,7 +34,7 @@ class State {
     this._isScrolling = false;
     this._scroll = { x: 0, y: 0 };
     this._mouse = { x: 0, y: 0 };
-    this._grid = { show: true, border: 2, coords: true };
+    this._grid = { show: true, border: 2, coord: true, path: true };
 
     this._hex = {
       size: { ...emptySize },

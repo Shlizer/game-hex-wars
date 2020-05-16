@@ -2,6 +2,7 @@ import EnginePart from './_part';
 import { Rect } from '../../../../Definitions/helper';
 import { hexDrawPoints, clearContext } from '../helpers';
 import State from '../state';
+import MapManager from '../../Map/manager';
 
 export default class Grid extends EnginePart {
   draw(hexWidth: number, hexHeight: number, columns: number, rows: number) {
@@ -9,7 +10,8 @@ export default class Grid extends EnginePart {
       for (let x = 0; x < rows; x++) {
         const rect = { x, y, w: hexWidth, h: hexHeight };
         if (State.grid.border > 0) this.drawGrid(rect);
-        if (State.grid.coords) this.drawCoords(rect);
+        if (State.grid.coord) this.drawCoords(rect);
+        if (State.grid.path) this.drawPaths(rect);
       }
     }
   }
@@ -31,14 +33,28 @@ export default class Grid extends EnginePart {
 
   drawCoords(rect: Rect) {
     const { x, y, w, h } = rect;
-    this.context.fillStyle = 'white';
+    const textX = x * w * 0.75 + w / 2;
+    const textY = y * h + (x % 2 ? h / 2 : 0) + h / 2;
+
+    this.context.fillStyle = 'rgba(255,255,255,0.5)';
     this.context.font = 'normal 1.2em Lato';
     this.context.textAlign = 'center';
-    this.context.fillText(
-      `${x}, ${y}`,
-      x * w * 0.75 + w / 2,
-      y * h + (x % 2 ? h / 2 : 0) + h / 2
-    );
+    this.context.fillText(`${x}, ${y}`, textX, textY);
+  }
+
+  drawPaths(rect: Rect) {
+    if (MapManager.current) {
+      const { x, y, w, h } = rect;
+      const textX = x * w * 0.75 + w / 2;
+      const textY = y * h + (x % 2 ? h / 2 : 0) + h / 2 + 12;
+      const path = MapManager.current.path?.[y]?.[x];
+      const textPath = path === undefined ? '-' : path.toString();
+
+      this.context.fillStyle = 'rgba(255,255,255,0.5)';
+      this.context.font = 'normal 1.2em Lato';
+      this.context.textAlign = 'center';
+      this.context.fillText(textPath, textX, textY);
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
