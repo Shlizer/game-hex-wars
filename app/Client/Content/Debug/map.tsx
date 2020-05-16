@@ -27,9 +27,7 @@ class DebugMap extends React.Component {
             <dt>Scale</dt>
             <dd className={this.getClassScale(scale)}>{scale}</dd>
             <dt>Scroll</dt>
-            <dd>
-              {x >= 0 && y >= 0 ? `${Math.round(x)}x${Math.round(y)}` : '-'}
-            </dd>
+            <dd>{`${Math.round(x)}x${Math.round(y)}`}</dd>
             <dt>Size (px)</dt>
             <dd>{`${Math.round(px.w)}x${Math.round(px.h)}`}</dd>
             <dt>Size (hex)</dt>

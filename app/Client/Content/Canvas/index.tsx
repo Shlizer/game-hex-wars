@@ -7,17 +7,19 @@ import Engine from '../../Store/Engine';
 import styles from './style.scss';
 
 function checkLimitX(x: number): number {
-  return Math.min(
-    State.map.size.full.w - State.viewport.size.w,
-    Math.max(0, x)
-  );
+  const map = State.map.size.full;
+  const viewport = State.viewport.size;
+
+  if (map.w < viewport.w) return -(viewport.w / 2 - map.w / 2);
+  return Math.min(map.w - viewport.w + State.grid.border, Math.max(0, x));
 }
 
 function checkLimitY(y: number): number {
-  return Math.min(
-    State.map.size.full.h - State.viewport.size.h,
-    Math.max(0, y)
-  );
+  const map = State.map.size.full;
+  const viewport = State.viewport.size;
+
+  if (map.h < viewport.h) return -(viewport.h / 2 - map.h / 2);
+  return Math.min(map.h - viewport.h + State.grid.border, Math.max(0, y));
 }
 
 class Canvas extends React.Component {

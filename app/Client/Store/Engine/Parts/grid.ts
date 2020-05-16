@@ -123,8 +123,8 @@ export default class Grid extends EnginePart {
   renderOnMain(_mainContext: CanvasRenderingContext2D): void {
     _mainContext.drawImage(
       this.canvas,
-      State.map.offset.left - State.scroll.x - this.current.grid.border / 2,
-      State.map.offset.top - State.scroll.y - this.current.grid.border / 2,
+      State.map.offset.left - State.scroll.x + this.current.grid.border / 2,
+      State.map.offset.top - State.scroll.y + this.current.grid.border / 2,
       this.canvas.width,
       this.canvas.height
     );
