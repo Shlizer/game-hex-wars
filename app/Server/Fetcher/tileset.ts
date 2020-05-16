@@ -6,19 +6,6 @@ import Options from '../options';
 import ErrorHandler from '../Error';
 import { TilesetConfig } from '../../Definitions/tileset';
 
-const defaults = {
-  main: {
-    name: '',
-    description: '',
-    author: '',
-    grouped: true,
-    file: 'tileset.png',
-    extension: 'png'
-  },
-  offset: { top: 0, left: 0, right: 0, bottom: 0 },
-  tiles: { name: '', description: '' }
-};
-
 export default class TSFetch {
   static init() {
     ipcMain.on(
@@ -49,8 +36,7 @@ export default class TSFetch {
 
         if (fs.existsSync(paths.tileset) && fs.existsSync(paths.info)) {
           list.push({
-            id: tsName,
-            path: paths.tileset,
+            ...{ id: tsName, path: paths.tileset },
             ...TSFetch.getConfig(fs.readJSONSync(paths.info))
           });
         } else {
@@ -64,17 +50,31 @@ export default class TSFetch {
   }
 
   static getConfig(info: TilesetConfig): TilesetConfig {
-    const custom: TilesetConfig = {
-      ...defaults.main,
-      ...info,
-      offset: { ...defaults.offset, ...(info.offset || {}) }
-    };
-    if (!custom.grouped && custom.tiles) {
-      Object.keys(custom.tiles).map(tileId => ({
-        ...defaults.tiles,
-        ...(custom.tiles ? custom.tiles[tileId] : {})
-      }));
+    const defaultSize = { w: 0, h: 0 };
+    const defaultOffset = { top: 0, left: 0, right: 0, bottom: 0 };
+
+    info = { ...{ name: '', description: '', author: '' }, ...info };
+    info.hex = { ...defaultSize, ...(info.hex || {}) };
+    info.offset = { ...defaultOffset, ...(info.offset || {}) };
+
+    if (info.tiles) {
+      Object.keys(info.tiles).forEach(tileId => {
+        info.tiles[tileId] = {
+          ...{ name: '', description: '' },
+          ...info.tiles[tileId]
+        };
+        info.tiles[tileId].hex = {
+          ...defaultSize,
+          ...(info.tiles[tileId].hex || {})
+        };
+        info.tiles[tileId].offset = {
+          ...defaultOffset,
+          ...(info.tiles[tileId].offset || {})
+        };
+      });
+    } else {
+      info.tiles = {};
     }
-    return custom;
+    return info;
   }
 }
