@@ -29,7 +29,7 @@ export default class Selection extends EnginePart {
       this.drawSelection({ ...State.hex.select, w, h });
     }
 
-    if (State.mouse.x > 0 && State.mouse.y > 0) {
+    if (State.mouse.position.x > 0 && State.mouse.position.y > 0) {
       const { w, h } = State.hex.size;
       if (
         State.hex.hover.x >= 0 &&

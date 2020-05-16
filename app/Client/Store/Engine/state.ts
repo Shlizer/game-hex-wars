@@ -6,7 +6,8 @@ class State {
   _loop: { firstDraw: boolean; shouldRedraw: boolean }; // Loop controls
   _isScrolling: boolean; // Is currently scrolling
   _scroll: Point; // Scroll offset
-  _mouse: Point; // Mouse position (in map)
+  _mouse: { position: Point; custom: boolean }; // Mouse position (in map) and custom gfx
+  _viewport: Size; // Size of the viewport
   _grid: { show: boolean; border: number; coord: boolean; path: boolean };
 
   _hex: {
@@ -33,7 +34,8 @@ class State {
     this._loop = { firstDraw: true, shouldRedraw: true };
     this._isScrolling = false;
     this._scroll = { x: 0, y: 0 };
-    this._mouse = { x: 0, y: 0 };
+    this._mouse = { position: { x: 0, y: 0 }, custom: false };
+    this._viewport = { w: 0, h: 0 };
     this._grid = { show: true, border: 2, coord: true, path: true };
 
     this._hex = {
@@ -67,6 +69,10 @@ class State {
     return this._mouse;
   }
 
+  get viewport() {
+    return this._viewport;
+  }
+
   get grid() {
     return this._grid;
   }
@@ -89,6 +95,7 @@ decorate(State, {
   _isScrolling: observable,
   _scroll: observable,
   _mouse: observable,
+  _viewport: observable,
   _grid: observable,
   _hex: observable,
   _map: observable,
@@ -97,6 +104,7 @@ decorate(State, {
   isScrolling: computed,
   scroll: computed,
   mouse: computed,
+  viewport: computed,
   grid: computed,
   hex: computed,
   map: computed,

@@ -20,15 +20,15 @@ export default class Input extends EnginePart {
     // Check mouse position
     const header = document.getElementById('titleBar')?.clientHeight || 0;
     const { left, top } = State.map.offset;
-    State.mouse.x = e.x - (left || 0);
-    State.mouse.y = e.y - (top || 0) - header;
+    State.mouse.position.x = e.x - (left || 0);
+    State.mouse.position.y = e.y - (top || 0) - header;
 
     // Check hex hover
     const map = State.map.size.hex;
     const { x, y } = pixelToHex({
       ...{
-        x: State.mouse.x + State.scroll.x,
-        y: State.mouse.y + State.scroll.y
+        x: State.mouse.position.x + State.scroll.x,
+        y: State.mouse.position.y + State.scroll.y
       },
       ...State.hex.size
     });
@@ -52,15 +52,23 @@ export default class Input extends EnginePart {
   };
 
   dragMove = (e: DragEvent) => {
-    State.scroll.x = Math.max(0, -e.x + this.drag.x);
-    State.scroll.y = Math.max(0, -e.y + this.drag.y);
+    State.scroll.x = Input.checkLimitX(-e.x + this.drag.x);
+    State.scroll.y = Input.checkLimitY(-e.y + this.drag.y);
   };
 
   dragEnd = (e: DragEvent) => {
-    State.scroll.x = Math.max(0, -e.x + this.drag.x);
-    State.scroll.y = Math.max(0, -e.y + this.drag.y);
+    State.scroll.x = Input.checkLimitX(-e.x + this.drag.x);
+    State.scroll.y = Input.checkLimitY(-e.y + this.drag.y);
     State.setScrolling(false);
   };
+
+  static checkLimitX(x: number): number {
+    return Math.min(State.map.size.full.w - State.viewport.w, Math.max(0, x));
+  }
+
+  static checkLimitY(y: number): number {
+    return Math.min(State.map.size.full.h - State.viewport.h, Math.max(0, y));
+  }
 
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
   update(): void {}

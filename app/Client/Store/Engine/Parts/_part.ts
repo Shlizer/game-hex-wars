@@ -3,6 +3,14 @@ import WithContext from '../../_withContext';
 export default class EnginePart extends WithContext {
   shouldUpdate = true;
 
+  checkCurrent(obj1: { [key: string]: any }, key: string, data: unknown) {
+    if (obj1?.[key] !== data) {
+      obj1[key] = data;
+      console.log(`value changed for ${this.constructor.name}: ${key}`);
+      this.shouldUpdate = true;
+    }
+  }
+
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
   update(_time: number): void {
     throw new Error('Method not implemented.');

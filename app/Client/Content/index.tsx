@@ -1,4 +1,6 @@
+/* eslint-disable class-methods-use-this */
 import React from 'react';
+import { decorate, computed } from 'mobx';
 import { observer } from 'mobx-react';
 import {
   ToastsContainer,
@@ -8,6 +10,7 @@ import {
 import { StoreContext } from '../Store';
 import State from '../Store/Engine/state';
 import MapChoose from './MapChoose';
+import Debug from './Debug';
 import Canvas from './Canvas';
 import Loading from './Loading';
 import Cursor from './Cursor';
@@ -15,28 +18,35 @@ import CursorTest from './Cursor/test';
 import styles from './style.scss';
 import './style.global.scss';
 
-const customPointer = false;
-
 class Content extends React.Component {
-  // eslint-disable-next-line class-methods-use-this
+  get classes() {
+    return [
+      styles.content,
+      State.mouse.custom ? styles.customPointer : ''
+    ].join(' ');
+  }
+
   get cursor() {
+    if (!State.mouse.custom) return null;
     return (
       <>
-        {customPointer ? <Cursor /> : null}
-        {customPointer && !State.map.selected ? null : <CursorTest />}
+        <Cursor />
+        {!State.map.selected ? null : <CursorTest />}
       </>
     );
   }
 
   render() {
     return (
-      <div
-        className={[
-          styles.content,
-          customPointer ? styles.customPointer : ''
-        ].join(' ')}
-      >
-        {State.map.selected ? <Canvas /> : <MapChoose />}
+      <div className={this.classes}>
+        {State.map.selected ? (
+          <>
+            <Canvas />
+            <Debug />
+          </>
+        ) : (
+          <MapChoose />
+        )}
         <Loading />
         <ToastsContainer
           store={ToastsStore}
@@ -47,6 +57,11 @@ class Content extends React.Component {
     );
   }
 }
+
+decorate(Content, {
+  classes: computed,
+  cursor: computed
+});
 
 Content.contextType = StoreContext;
 export default observer(Content);
