@@ -1,17 +1,19 @@
 import EnginePart from './_part';
 import { Rect } from '../../../../Definitions/helper';
-import { hexDrawPoints, clearContext } from '../helpers';
-import State from '../state';
+import { hexDrawPoints } from '../helpers';
+import State from '../../State';
 import MapManager from '../../Map/manager';
 
 export default class Grid extends EnginePart {
   current: {
+    scale: number;
     grid: { show: boolean; border: number; coord: boolean; path: boolean };
   };
 
   constructor() {
     super();
     this.current = {
+      scale: State.viewport.scale,
       grid: {
         show: State.grid.show,
         border: State.grid.border,
@@ -97,9 +99,10 @@ export default class Grid extends EnginePart {
   update(_time: number) {
     const w = State.map.size.px.w + State.grid.border;
     const h = State.map.size.px.h + State.grid.border;
+    this.checkCurrent(this.canvas, 'width', Math.round(w));
+    this.checkCurrent(this.canvas, 'height', Math.round(h));
 
-    this.checkCurrent(this.canvas, 'width', w);
-    this.checkCurrent(this.canvas, 'height', h);
+    this.checkCurrent(this.current, 'scale', State.viewport.scale);
     this.checkCurrent(this.current.grid, 'show', State.grid.show);
     this.checkCurrent(this.current.grid, 'border', State.grid.border);
     this.checkCurrent(this.current.grid, 'coord', State.grid.coord);
@@ -108,7 +111,6 @@ export default class Grid extends EnginePart {
 
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
   renderPrepare(): void {
-    clearContext(this.context);
     this.draw(
       State.hex.size.w || 0,
       State.hex.size.h || 0,

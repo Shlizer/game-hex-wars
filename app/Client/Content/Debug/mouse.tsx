@@ -2,7 +2,7 @@
 import React from 'react';
 import { decorate, computed } from 'mobx';
 import { observer } from 'mobx-react';
-import State from '../../Store/Engine/state';
+import State from '../../Store/State';
 
 class DebugMouse extends React.Component {
   get showMouse() {

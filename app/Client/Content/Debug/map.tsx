@@ -2,12 +2,21 @@
 import React from 'react';
 import { decorate, computed } from 'mobx';
 import { observer } from 'mobx-react';
-import State from '../../Store/Engine/state';
+import State from '../../Store/State';
 import styles from './style.scss';
 
 class DebugMap extends React.Component {
+  getClassScale(value: number) {
+    if (value > 1.2) return styles.good;
+    if (value < 0.9) return styles.poor;
+    return styles.medium;
+  }
+
   get showMap() {
     const { x, y } = State.scroll;
+    const { px, hex, full } = State.map.size;
+    const { scale } = State.viewport;
+
     return (
       <>
         <dt className={styles.section}>Map</dt>
@@ -15,14 +24,18 @@ class DebugMap extends React.Component {
         <dd>{State.map.selected || '-'}</dd>
         {State.map.selected ? (
           <>
+            <dt>Scale</dt>
+            <dd className={this.getClassScale(scale)}>{scale}</dd>
             <dt>Scroll</dt>
-            <dd>{x >= 0 && y >= 0 ? `${x}x${y}` : '-'}</dd>
+            <dd>
+              {x >= 0 && y >= 0 ? `${Math.round(x)}x${Math.round(y)}` : '-'}
+            </dd>
             <dt>Size (px)</dt>
-            <dd>{`${State.map.size.px.w}x${State.map.size.px.h}`}</dd>
+            <dd>{`${Math.round(px.w)}x${Math.round(px.h)}`}</dd>
             <dt>Size (hex)</dt>
-            <dd>{`${State.map.size.hex.w}x${State.map.size.hex.h}`}</dd>
+            <dd>{`${hex.w}x${hex.h}`}</dd>
             <dt>Size (offset)</dt>
-            <dd>{`${State.map.size.full.w}x${State.map.size.full.h}`}</dd>
+            <dd>{`${Math.round(full.w)}x${Math.round(full.h)}`}</dd>
           </>
         ) : null}
       </>

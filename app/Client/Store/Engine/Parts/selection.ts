@@ -1,11 +1,22 @@
 import EnginePart from './_part';
-import { clearContext, hexDrawPoints } from '../helpers';
-import State from '../state';
-import { Rect } from '../../../../Definitions/helper';
+import { hexDrawPoints } from '../helpers';
+import State from '../../State';
+import { Rect, Size, Point } from '../../../../Definitions/helper';
 
 export default class Selection extends EnginePart {
+  current: {
+    scale: number;
+    map: { size: Size };
+    hex: { select: Point; hover: Point };
+  };
+
   constructor() {
     super();
+    this.current = {
+      scale: State.viewport.scale,
+      map: { size: State.map.size.px },
+      hex: { select: State.hex.select, hover: State.hex.hover }
+    };
     document.addEventListener('mousedown', this.mouseClick);
   }
 
@@ -13,11 +24,9 @@ export default class Selection extends EnginePart {
     setTimeout(() => {
       if (e.button === 0 && !State.isScrolling) {
         if (State.hex.hover.x >= 0 && State.hex.hover.y >= 0) {
-          State.hex.select.x = State.hex.hover.x;
-          State.hex.select.y = State.hex.hover.y;
+          State.hexSelect = { x: State.hex.hover.x, y: State.hex.hover.y };
         } else {
-          State.hex.select.x = -1;
-          State.hex.select.x = -1;
+          State.hexSelect = { x: -1, y: -1 };
         }
       }
     }, 50);
@@ -69,16 +78,15 @@ export default class Selection extends EnginePart {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
   update(_time: number) {
     const { w, h } = State.map.size.px;
-    if (this.canvas.width !== w || this.canvas.height !== h) {
-      this.canvas.width = w;
-      this.canvas.height = h;
-    }
-    this.shouldUpdate = true;
+    this.checkCurrent(this.canvas, 'width', Math.round(w));
+    this.checkCurrent(this.canvas, 'height', Math.round(h));
+
+    this.checkCurrent(this.current.hex, 'hover', State.hex.hover);
+    this.checkCurrent(this.current.hex, 'select', State.hex.select);
   }
 
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
   renderPrepare(): void {
-    clearContext(this.context);
     this.draw();
   }
 

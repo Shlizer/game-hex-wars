@@ -1,20 +1,17 @@
-import { action, observable } from 'mobx';
-import State from '../Engine/state';
+import { action } from 'mobx';
+import State from '../State';
 import cursors, { icons } from './blue';
 
 class Cursor {
-  static position = observable({ x: 0, y: 0 });
-
-  static getMouse = action((e: MouseEvent) => {
+  static mouseMove = action((e: MouseEvent) => {
     State.mouse.visible = true;
-    const header = document.getElementById('titleBar')?.clientHeight || 0;
-    Cursor.position.x = e.x;
-    Cursor.position.y = e.y - header;
+    State.mouse.position.x = e.x;
+    State.mouse.position.y =
+      e.y - (document.getElementById('titleBar')?.clientHeight || 0);
   });
 
   static mouseOut = action(() => {
     State.mouse.visible = false;
-    console.log('mouse out');
   });
 
   static setDefault() {
@@ -38,8 +35,16 @@ class Cursor {
   }
 }
 
+action(() => {
+  if (State.isScrolling) {
+    window.removeEventListener('mousemove', Cursor.mouseMove);
+  } else {
+    window.addEventListener('mousemove', Cursor.mouseMove);
+  }
+});
+
 State.mouse.mode = cursors.default;
-document.addEventListener('mousemove', Cursor.getMouse);
+window.addEventListener('mousemove', Cursor.mouseMove);
 window.addEventListener('mouseout', Cursor.mouseOut);
 
 export default Cursor;

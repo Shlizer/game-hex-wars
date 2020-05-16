@@ -1,11 +1,21 @@
 import EnginePart from './_part';
-import State from '../state';
+import State from '../../State';
 import MapManager from '../../Map/manager';
 import LayerObject from '../../Map/layer';
 import { LayerType } from '../../../../Definitions/layer';
-import { clearContext } from '../helpers';
+import { Size } from '../../../../Definitions/helper';
 
 export default class Map extends EnginePart {
+  current: { scale: number; map: { size: Size } };
+
+  constructor() {
+    super();
+    this.current = {
+      scale: State.viewport.scale,
+      map: { size: State.map.size.full }
+    };
+  }
+
   renderLayer = (layer: LayerObject) => {
     const layerCtx = layer.render();
     this.context.drawImage(
@@ -21,19 +31,15 @@ export default class Map extends EnginePart {
 
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
   update(_time: number) {
-    if (
-      this.canvas.width !== State.map.size.full.w ||
-      this.canvas.height !== State.map.size.full.h
-    ) {
-      this.canvas.width = State.map.size.full.w;
-      this.canvas.height = State.map.size.full.h;
-      this.shouldUpdate = true;
-    }
+    const { w, h } = State.map.size.full;
+    this.checkCurrent(this.canvas, 'width', Math.round(w));
+    this.checkCurrent(this.canvas, 'height', Math.round(h));
+
+    this.checkCurrent(this.current, 'scale', State.viewport.scale);
   }
 
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
   renderPrepare(): void {
-    clearContext(this.context);
     MapManager.current?.layers.forEach(this.renderLayer);
   }
 

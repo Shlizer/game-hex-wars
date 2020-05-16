@@ -5,7 +5,7 @@ import { Size } from '../../../Definitions/helper';
 import { getMapSize } from './helper';
 import { MapInfo, MapLayout } from '../../../Definitions/map';
 import { TilesetConfig } from '../../../Definitions/tileset';
-import State from '../Engine/state';
+import State from '../State';
 import TSManager from '../Tileset/manager';
 import Loader from '../Loader';
 import Fetcher from '../fetch';
@@ -30,11 +30,11 @@ export default class MapObject {
     return this.load()
       .then(loaded => {
         if (loaded && this.layout) {
-          State.hex.size = this.layout.hex;
-          State.map.offset = this.layout.offset;
-          State.map.size.hex = this.layout.size;
+          State.hexSize = this.layout.hex;
+          State.mapOffset = this.layout.offset;
+          State.mapSizeHex = this.layout.size;
           // @todo: get size from layers
-          State.map.size.px = {
+          State.mapSizePx = {
             ...getMapSize(
               State.map.size.hex.w,
               State.map.size.hex.h,
@@ -42,16 +42,18 @@ export default class MapObject {
               State.hex.size.h
             )
           };
-          State.map.size.full.w =
-            State.map.size.px.w +
-            State.map.offset.left +
-            State.map.offset.right;
-          State.map.size.full.h =
-            State.map.size.px.h +
-            State.map.offset.top +
-            State.map.offset.bottom;
+          State.mapSizeFull = {
+            w:
+              State.map.size.px.w +
+              State.map.offset.left +
+              State.map.offset.right,
+            h:
+              State.map.size.px.h +
+              State.map.offset.top +
+              State.map.offset.bottom
+          };
 
-          State.map.selected = this.info.id;
+          State.mapSelected = this.info.id;
           this.selected = true;
           return true;
         }

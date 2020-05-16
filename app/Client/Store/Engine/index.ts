@@ -1,5 +1,5 @@
 /* eslint-disable react/static-property-placement */
-import State from './state';
+import State from '../State';
 import Map from './Parts/map';
 import Grid from './Parts/grid';
 import Input from './Parts/input';

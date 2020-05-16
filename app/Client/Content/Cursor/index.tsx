@@ -3,26 +3,30 @@
 import React from 'react';
 import { computed, decorate } from 'mobx';
 import { observer } from 'mobx-react';
-import State from '../../Store/Engine/state';
-import CursorStore from '../../Store/Cursor';
+import State from '../../Store/State';
 import styles from './style.scss';
 
 class Cursor extends React.Component {
-  get position() {
+  get style() {
     return {
-      top: CursorStore.position.y,
-      left: CursorStore.position.x
+      // pointerEvents: State.isScrolling ? 'all' : 'none',
+      top: State.mouse.position.y,
+      left: State.mouse.position.x
     };
   }
 
   get cursor() {
-    console.log('show other cursor');
     return <img src={State.mouse.mode} alt="Cursor" />;
   }
 
   render() {
     return State.mouse.show && State.mouse.visible ? (
-      <div className={styles.cursor} style={{ ...this.position }}>
+      <div
+        draggable
+        onDrag={e => e.preventDefault()}
+        className={styles.cursor}
+        style={this.style}
+      >
         {this.cursor}
       </div>
     ) : null;
@@ -30,7 +34,7 @@ class Cursor extends React.Component {
 }
 
 decorate(Cursor, {
-  position: computed,
+  style: computed,
   cursor: computed
 });
 

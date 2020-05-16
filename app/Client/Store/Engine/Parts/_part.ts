@@ -1,4 +1,6 @@
 import WithContext from '../../_withContext';
+import { clearContext } from '../helpers';
+import State from '../../State';
 
 export default class EnginePart extends WithContext {
   shouldUpdate = true;
@@ -7,7 +9,6 @@ export default class EnginePart extends WithContext {
   checkCurrent(obj1: { [key: string]: any }, key: string, data: unknown) {
     if (obj1?.[key] !== data) {
       obj1[key] = data;
-      console.log(`value changed for ${this.constructor.name}: ${key}`);
       this.shouldUpdate = true;
     }
   }
@@ -20,6 +21,8 @@ export default class EnginePart extends WithContext {
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
   renderWrapper(_mainContext: CanvasRenderingContext2D): void {
     if (this.shouldUpdate) {
+      clearContext(this.context);
+      this.context.scale(State.viewport.scale, State.viewport.scale);
       this.renderPrepare();
       this.shouldUpdate = false;
     }

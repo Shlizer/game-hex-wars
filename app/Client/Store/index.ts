@@ -1,5 +1,5 @@
 import React from 'react';
-import State from './Engine/state';
+import State from './State';
 import Manager from './Map/manager';
 
 export default class Store {
@@ -16,7 +16,7 @@ export default class Store {
 
   // eslint-disable-next-line class-methods-use-this
   deselectMap() {
-    State.map.selected = undefined;
+    State.mapSelected = undefined;
   }
 }
 
