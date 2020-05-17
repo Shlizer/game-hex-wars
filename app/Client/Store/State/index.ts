@@ -28,7 +28,7 @@ class State {
   };
 
   // Grid extras
-  _grid = { show: true, border: 2, coord: true, path: true };
+  _grid = { show: false, border: 2, coord: false, path: false };
 
   // Hex data
   _hex = {

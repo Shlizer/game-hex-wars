@@ -27,11 +27,10 @@ export default class Grid extends EnginePart {
     for (let y = 0; y < columns; y++) {
       for (let x = 0; x < rows; x++) {
         const rect = { x, y, w: hexWidth, h: hexHeight };
-        if (this.current.grid.show) {
-          if (this.current.grid.border > 0) this.drawGrid(rect);
-          if (this.current.grid.coord) this.drawCoords(rect);
-          if (this.current.grid.path) this.drawPaths(rect);
-        }
+        if (this.current.grid.show && this.current.grid.border > 0)
+          this.drawGrid(rect);
+        if (this.current.grid.coord) this.drawCoords(rect);
+        if (this.current.grid.path) this.drawPaths(rect);
       }
     }
   }
@@ -53,20 +52,22 @@ export default class Grid extends EnginePart {
 
   drawCoords(rect: Rect) {
     const { x, y, w, h } = rect;
+    const { path } = this.current.grid;
     const textX = x * w * 0.75 + w / 2;
-    const textY = y * h + (x % 2 ? h / 2 : 0) + h / 2;
+    const textY = y * h + (x % 2 ? h / 2 : 0) + h / 2 + (path ? -2 : 5);
 
-    this.context.fillStyle = 'rgba(255,255,255,0.5)';
+    this.context.fillStyle = 'rgba(255,255,255,0.7)';
     this.context.font = 'normal 1.2em Lato';
     this.context.textAlign = 'center';
-    this.context.fillText(`${x}, ${y}`, textX, textY);
+    this.context.fillText(`${x} , ${y}`, textX, textY);
   }
 
   drawPaths(rect: Rect) {
     if (MapManager.current) {
       const { x, y, w, h } = rect;
+      const { coord } = this.current.grid;
       const textX = x * w * 0.75 + w / 2;
-      const textY = y * h + (x % 2 ? h / 2 : 0) + h / 2 + 12;
+      const textY = y * h + (x % 2 ? h / 2 : 0) + h / 2 + (coord ? 14 : 5);
       const path = MapManager.current.path?.[y]?.[x];
       const textPath = path === undefined ? '-' : path.toString();
 

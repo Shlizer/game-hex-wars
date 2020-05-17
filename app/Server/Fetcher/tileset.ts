@@ -70,8 +70,8 @@ export default class TSFetch {
             name: info.tiles[tileId].name || '',
             file: info.tiles[tileId].file || '',
             description: info.tiles[tileId].description || '',
-            hex: getSize(info.tiles[tileId].hex),
-            offset: getOffset(info.tiles[tileId].offset)
+            hex: getSize(info.hex, info.tiles[tileId].hex),
+            offset: getOffset(info.offset, info.tiles[tileId].offset)
           };
         }
       });

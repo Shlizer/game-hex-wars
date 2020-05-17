@@ -37,10 +37,33 @@ export default class TilesetObject {
   }
 
   async loadMultiple(): Promise<boolean> {
-    return new Promise(resolve => {
-      let num = 1;
+    return Object.keys(this.config.tiles).length
+      ? this.loadMultipleCustom()
+      : this.loadMultipleAuto();
+  }
 
+  async loadMultipleCustom(): Promise<boolean> {
+    return new Promise(resolve => {
+      const { tiles } = this.config;
+      const promises: Promise<void>[] = [];
+
+      Object.keys(tiles).forEach(id => {
+        const filename = `${this.config.path}/${tiles[id].file}`;
+        promises.push(
+          this.loadFile(filename).then(image => {
+            this.setCanvas(id, filename, image);
+          })
+        );
+      });
+
+      return Promise.all(promises).then(() => resolve(true));
+    });
+  }
+
+  async loadMultipleAuto(): Promise<boolean> {
+    return new Promise(resolve => {
       (async () => {
+        let num = 1;
         do {
           const filename = `${this.config.path}/${num}.${this.config.extension}`;
           // eslint-disable-next-line no-await-in-loop
@@ -69,6 +92,7 @@ export default class TilesetObject {
 
   setCanvas(id: string, filename: string, image: HTMLImageElement) {
     if (!this.config.tiles) this.config.tiles = {};
+
     this.config.tiles[id] = {
       ...(this.config.tiles[id] ? this.config.tiles[id] : {}),
       file: filename,
