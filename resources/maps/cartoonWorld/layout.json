@@ -1,0 +1,219 @@
+{
+  "layers": [
+    {
+      "type": "TILE",
+      "tileset": "cartoon",
+      "alpha": 1,
+      "tiles": [
+        [
+          4,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          4
+        ],
+        [
+          4,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          4
+        ],
+        [
+          4,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          4
+        ],
+        [
+          4,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          4
+        ],
+        [
+          4,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          4
+        ],
+        [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+      ]
+    },
+    {
+      "type": "TILE",
+      "tileset": "cartoon",
+      "alpha": 1,
+      "tiles": [
+        [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+        [3, 2, 2, 2, 1, 3, 3, 1, 1, 1, 1, 1, 3],
+        [3, 1, 2, 2, 1, 1, 3, 3, 1, 1, 1, 1, 3],
+        [3, 1, 1, 2, 2, 3, 3, 3, 1, 1, 2, 1, 3],
+        [3, 1, 1, 1, 3, 3, 1, 1, 1, 1, 1, 1, 3],
+        [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+      ]
+    },
+    {
+      "type": "TILE",
+      "tileset": "cartoon",
+      "alpha": 1,
+      "tiles": [
+        [
+          null,
+          "e_w_1",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "e_w_1",
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "e_b_2",
+          null,
+          "e_m_2",
+          "e_w_2"
+        ],
+        [
+          null,
+          null,
+          null,
+          "e_m_3",
+          null,
+          null,
+          "e_w_1",
+          "e_w_1",
+          null,
+          "e_m_1",
+          null,
+          null,
+          null
+        ],
+        [
+          "e_w_2",
+          "e_b_4",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "e_b_1",
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          "e_b_3",
+          null,
+          null,
+          null,
+          null,
+          "e_m_1",
+          null,
+          "e_m_3",
+          null,
+          "e_w_1"
+        ],
+        [
+          null,
+          "e_w_2",
+          null,
+          null,
+          "e_w_1",
+          null,
+          null,
+          "e_w_2",
+          null,
+          null,
+          null,
+          "e_w_3",
+          null
+        ]
+      ]
+    }
+  ],
+  "path": [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 2, 2, 2, 1, 0, 0, 1, 1, 1, 1, 1, 0],
+    [0, 1, 2, 2, 1, 1, 0, 0, 1, 1, 1, 1, 0],
+    [0, 1, 1, 2, 2, 0, 0, 0, 1, 1, 2, 1, 0],
+    [0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  ],
+  "hex": {
+    "width": 128,
+    "height": 110
+  },
+  "offset": {
+    "top": 50,
+    "left": 50,
+    "right": 50,
+    "bottom": 50
+  },
+  "size": {
+    "width": 13,
+    "height": 6
+  }
+}

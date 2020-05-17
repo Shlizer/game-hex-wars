@@ -1,0 +1,76 @@
+{
+  "name": "Cartoon",
+  "description": "Set złożony z wielu plików",
+  "author": "Shlizer",
+  "grouped": false,
+  "offset": {
+    "top": 1,
+    "bottom": 18
+  },
+  "hex": {
+    "width": 128,
+    "height": 110
+  },
+  "tiles": {
+    "1": {
+      "file": "grass.png",
+      "name": "Trawa",
+      "description": "Taka całkiem zwykła trawa"
+    },
+    "2": {
+      "file": "dirt.png",
+      "name": "Piach",
+      "description": "Prawie jak z plaży"
+    },
+    "3": {
+      "file": "water.png",
+      "name": "Woda",
+      "description": "Nie da się przez nią przejść"
+    },
+    "4": {
+      "file": "_drop.png",
+      "name": "Spad",
+      "description": "Żeby ładnie wyglądało"
+    },
+    "e_b_1": {
+      "file": "e_bush_1.png",
+      "name": "Krzak"
+    },
+    "e_b_2": {
+      "file": "e_bush_2.png",
+      "name": "Krzak"
+    },
+    "e_b_3": {
+      "file": "e_bush_3.png",
+      "name": "Krzak"
+    },
+    "e_b_4": {
+      "file": "e_bush_4.png",
+      "name": "Krzak"
+    },
+    "e_m_1": {
+      "file": "e_misc_1.png",
+      "name": "Różne"
+    },
+    "e_m_2": {
+      "file": "e_misc_2.png",
+      "name": "Różne"
+    },
+    "e_m_3": {
+      "file": "e_misc_3.png",
+      "name": "Różne"
+    },
+    "e_w_1": {
+      "file": "e_wave_1.png",
+      "name": "Fala"
+    },
+    "e_w_2": {
+      "file": "e_wave_2.png",
+      "name": "Fala"
+    },
+    "e_w_3": {
+      "file": "e_wave_3.png",
+      "name": "Fala"
+    }
+  }
+}

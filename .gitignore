@@ -50,5 +50,6 @@ npm-debug.log.*
 *.scss.d.ts
 
 # For now, keeping there test configs
-resources/maps
-resources/tilesets
+resources/maps/test*
+resources/tilesets/test*
+src/
