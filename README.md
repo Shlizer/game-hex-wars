@@ -34,7 +34,7 @@ Tested on Win8.1, Win10 and Ubuntu18, but it should also run on Mac's.
 
 Window is small only for presentation.
 
-![anim](docs\pics\anim.gif) ![anim](docs\pics\anim2.gif)
+![Screen 1](docs/pics/anim.gif) ![Screen 2](docs/pics/anim2.gif)
 
 ## Author, contribute and license
 
