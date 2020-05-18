@@ -5,4 +5,5 @@
 ## Table of Contents
 
 1. [Config files](./config.md)
-2.
+
+To be complete from hand-write documentation =)
